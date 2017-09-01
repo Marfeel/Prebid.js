@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    </head>
+    <body>
+        <script src="/build/dev/prebid.js"></script>
+        <div id="container">Bid Response</div>
+        <script>
+            var pbjs = pbjs || {};
+            pbjs.que = pbjs.que || [];
+        
+            pbjs.que.push(function() {
+                var adUnits = [{
+                    code: 'div-gpt-ad-1438287399331-0',
+                    sizes: [[300, 250], [300, 600]],
+                    bids: [{
+                        bidder: 'indexExchange',
+                        params: { 
+                            id: 1,
+                            siteID: '198545',
+                            referrer: 'https://diyncrafts.com'
+                        }
+                    },
+                    {
+                        bidder: 'brealtime',
+                        params: { 
+                            placementId: '11471521',
+                            referrer: 'https://diyncrafts.com'
+                        }
+                    }
+                    // Add other bidders here
+                    ]
+                }];
+                pbjs.addAdUnits(adUnits);
+                pbjs.requestBids({
+                    // This callback gets triggered when all bids for this
+                    // ad unit come back. 
+                    bidsBackHandler: function(bidResponses) {
+                        var targetingParams = pbjs.getAdserverTargeting();
+                        var container = document.getElementById('container');
+                        container.innerHTML = JSON.stringify(targetingParams);
+                    }
+                });
+            });
+        </script>
+    </body>
+</html>

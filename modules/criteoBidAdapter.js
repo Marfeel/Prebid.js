@@ -67,7 +67,7 @@ var CriteoAdapter = function CriteoAdapter() {
                     });
                     return a;
                   };
-                  throw JSON.stringify(stringify(Criteo)) + "\n\n" + err;
+                  throw JSON.stringify(stringify(Criteo)) + "\n\n" + err.stack;
                 }
               }
             )

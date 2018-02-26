@@ -16,6 +16,7 @@ function PubmaticAdapter() {
   var _pm_pub_gender;
   var _pm_pub_kvs;
   var _pm_optimize_adslots = [];
+  var _pm_pub_page_url;
   let iframe;
 
   function _callBids(params) {
@@ -28,6 +29,7 @@ function PubmaticAdapter() {
       _pm_pub_age = _pm_pub_age || (bid.params.age || '');
       _pm_pub_gender = _pm_pub_gender || (bid.params.gender || '');
       _pm_pub_kvs = _pm_pub_kvs || (bid.params.kvs || '');
+      _pm_pub_page_url = _pm_pub_page_url || (bid.params.referrer || '');
       _pm_optimize_adslots.push(bid.params.adSlot);
     }
 
@@ -61,6 +63,8 @@ function PubmaticAdapter() {
       'window.kaddctr = "%%PM_ADDCTR%%";' +
       'window.kadgender = "%%PM_GENDER%%";' +
       'window.kadage = "%%PM_AGE%%";' +
+      'window.kadpageurl = "%%PM_PAGE_URL%%";' +
+      'window.pageURL = "%%PM_PAGE_URL%%";' +
       'window.pm_async_callback_fn = "window.parent.$$PREBID_GLOBAL$$.handlePubmaticCallback";';
 
     content += '</scr' + 'ipt>';
@@ -70,6 +74,7 @@ function PubmaticAdapter() {
     map.PM_ADDCTR = _pm_pub_kvs;
     map.PM_GENDER = _pm_pub_gender;
     map.PM_AGE = _pm_pub_age;
+    map.PM_PAGE_URL = _pm_pub_page_url;
     map.PM_OPTIMIZE_ADSLOTS = _pm_optimize_adslots.map(function (adSlot) {
       return "'" + adSlot + "'";
     }).join(',');

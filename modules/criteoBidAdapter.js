@@ -26,6 +26,13 @@ var CriteoAdapter = function CriteoAdapter() {
     }
   }
 
+  function _getWidth(size) {
+    return size && parseInt(size.split('x')[0], 10);
+  }
+  function _getHeight(size) {
+    return size && parseInt(size.split('x')[1], 10);
+  }
+
   // send bid request to criteo direct bidder handler
   function _pushBidRequestEvent(params) {
     // if we want to be fully asynchronous, we must first check window.criteo_pubtag in case publishertag.js is not loaded yet.
@@ -44,19 +51,25 @@ var CriteoAdapter = function CriteoAdapter() {
       for (var i = 0; i < bids.length; i++) {
         var bid = bids[i];
         var sizes = utils.parseSizesInput(bid.sizes);
+        var width = _getWidth(bid.params.size);
+        var height = _getHeight(bid.params.size);
+        var size = (width && height) ? [new Criteo.PubTag.DirectBidding.Size(width, height)]
+          : null;
+
+        var sizes = size || sizes.map((sizeString) => {
+          var xIndex = sizeString.indexOf('x');
+          var w = parseInt(sizeString.substring(0, xIndex));
+          var h = parseInt(sizeString.substring(xIndex + 1, sizeString.length))
+          return new Criteo.PubTag.DirectBidding.Size(w, h);
+        });
+
         slots.push(
           new Criteo.PubTag.DirectBidding.DirectBiddingSlot(
             bid.placementCode,
             bid.params.zoneId,
             bid.params.nativeCallback ? bid.params.nativeCallback : undefined,
             bid.transactionId,
-            sizes.map((sizeString) => {
-              var xIndex = sizeString.indexOf('x');
-              var w = parseInt(sizeString.substring(0, xIndex));
-              var h = parseInt(sizeString.substring(xIndex + 1, sizeString.length))
-              return new Criteo.PubTag.DirectBidding.Size(w, h);
-            }
-            )
+            sizes
           )
         );
 

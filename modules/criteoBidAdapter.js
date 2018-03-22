@@ -56,7 +56,7 @@ var CriteoAdapter = function CriteoAdapter() {
         var size = (width && height) ? [new Criteo.PubTag.DirectBidding.Size(width, height)]
           : null;
 
-        var sizes = size || sizes.map((sizeString) => {
+        sizes = size || sizes.map((sizeString) => {
           var xIndex = sizeString.indexOf('x');
           var w = parseInt(sizeString.substring(0, xIndex));
           var h = parseInt(sizeString.substring(xIndex + 1, sizeString.length))

@@ -212,6 +212,10 @@ const OpenxAdapter = function OpenxAdapter() {
     }
   }
 
+  function retrieveReferrer(bids) {
+    return bids.map(b => b.params.referrer).find(url => !!url);
+  }
+
   function callBids(params) {
     let isIfr;
     const bids = params.bids || [];
@@ -233,9 +237,11 @@ const OpenxAdapter = function OpenxAdapter() {
       timeout = params.timeout;
     }
 
+    const referrer = retrieveReferrer(bids);
+
     buildRequest(bids, {
-      ju: currentURL,
-      jr: currentURL,
+      ju: referrer || currentURL,
+      jr: referrer || currentURL,
       ch: document.charSet || document.characterSet,
       res: `${screen.width}x${screen.height}x${screen.colorDepth}`,
       ifr: isIfr,

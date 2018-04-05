@@ -409,7 +409,15 @@ $$PREBID_GLOBAL$$.requestBids = function ({ bidsBackHandler, timeout, adUnits, a
 
   // set timeout for all bids
   const timedOut = true;
-  const timeoutCallback = bidmanager.executeCallback.bind(bidmanager, timedOut);
+  const timeoutCallback = function () {
+    const responses = $$PREBID_GLOBAL$$._bidsReceived
+      .filter(adUnitsFilter.bind(this, $$PREBID_GLOBAL$$._adUnitCodes));
+
+    // find the last requested id to get responses for most recent auction only
+    const currentRequestId = responses && responses.length && responses[responses.length - 1].requestId;
+
+    bidmanager.executeCallback(currentRequestId, timedOut);
+  };
   const timer = setTimeout(timeoutCallback, cbTimeout);
   setAjaxTimeout(cbTimeout);
   if (typeof bidsBackHandler === 'function') {

@@ -123,7 +123,7 @@ export function newAuction({adUnits, adUnitCodes, callback, cbTimeout, labels}) 
         }
       }
 
-      events.emit(CONSTANTS.EVENTS.AUCTION_END, {auctionId: _auctionId});
+      events.emit(CONSTANTS.EVENTS.AUCTION_END, {auctionId: _auctionId, timedOut});
 
       try {
         _auctionStatus = AUCTION_COMPLETED;

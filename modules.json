@@ -1,0 +1,13 @@
+[
+    "appnexusBidAdapter",
+    "rubiconBidAdapter",
+    "ixBidAdapter",
+    "pulsepointBidAdapter",
+    "sovrnBidAdapter",
+    "openxBidAdapter",
+    "pubmaticBidAdapter",
+    "smartadserverBidAdapter",
+    "prebidServerBidAdapter",
+
+    "marfeelAnalyticsAdapter"
+]

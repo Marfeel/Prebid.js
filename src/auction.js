@@ -149,11 +149,8 @@ export function newAuction({adUnits, adUnitCodes, callback, cbTimeout, labels}) 
         }
       }
 
-<<<<<<< HEAD
       events.emit(CONSTANTS.EVENTS.AUCTION_END, {auctionId: _auctionId, timedOut});
 
-=======
->>>>>>> improves additional data passed to the handler in AuctionInit and AuctionEnd events (#3168)
       try {
         _auctionStatus = AUCTION_COMPLETED;
         _auctionEnd = Date.now();

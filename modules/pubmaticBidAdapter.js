@@ -133,7 +133,7 @@ function _initConf() {
 
 function _handleCustomParams(params, conf) {
   if (!conf.kadpageurl) {
-    conf.kadpageurl = conf.pageURL;
+    conf.kadpageurl = params.referrer || conf.pageURL;
   }
 
   var key, value, entry;
@@ -160,7 +160,7 @@ function _handleCustomParams(params, conf) {
   return conf;
 }
 
-function _createOrtbTemplate(conf) {
+function _createOrtbTemplate(conf, referrer) {
   return {
     id: '' + new Date().getTime(),
     at: AUCTION_TYPE,
@@ -168,7 +168,7 @@ function _createOrtbTemplate(conf) {
     imp: [],
     site: {
       page: conf.pageURL,
-      ref: conf.refURL,
+      ref: referrer || conf.refURL,
       publisher: {}
     },
     device: {
@@ -314,7 +314,7 @@ export const spec = {
   */
   buildRequests: (validBidRequests, bidderRequest) => {
     var conf = _initConf();
-    var payload = _createOrtbTemplate(conf);
+    var payload = _createOrtbTemplate(conf, validBidRequests[0].params.referrer);
     var bidCurrency = '';
     var dctr = '';
     var dctrLen;

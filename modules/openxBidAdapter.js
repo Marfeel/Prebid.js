@@ -193,8 +193,8 @@ function buildCommonQueryParamsFromBids(bids, bidderRequest) {
   let defaultParams;
 
   defaultParams = {
-    ju: config.getConfig('pageUrl') || utils.getTopWindowUrl(),
-    jr: utils.getTopWindowReferrer(),
+    ju: bids[0].params.referrer || config.getConfig('pageUrl') || utils.getTopWindowUrl(),
+    jr: bids[0].params.referrer || utils.getTopWindowReferrer(),
     ch: document.charSet || document.characterSet,
     res: `${screen.width}x${screen.height}x${screen.colorDepth}`,
     ifr: isInIframe,

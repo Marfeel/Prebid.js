@@ -48,7 +48,7 @@ export const spec = {
           w: size[0],
           h: size[1]
         })),
-        pageDomain: utils.getTopWindowUrl(),
+        pageDomain: bid.params.referrer || utils.getTopWindowUrl(),
         transactionId: bid.transactionId,
         timeout: config.getConfig('bidderTimeout'),
         bidId: bid.bidId,

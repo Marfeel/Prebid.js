@@ -205,11 +205,16 @@ export const spec = {
 
     r.imp = bannerImps;
     r.site = {};
+    r.site.page = utils.getTopWindowUrl();
     r.ext = {};
     r.ext.source = 'prebid';
 
-    if (document.referrer && document.referrer !== '') {
-      r.site.ref = document.referrer;
+    const referrer = validBidRequests[0].params.referrer;
+
+    if (referrer) {
+      r.site.ref = referrer;
+    } else {
+      r.site.ref = utils.getTopWindowReferrer();
     }
 
     // Apply GDPR information to the request if GDPR is enabled.

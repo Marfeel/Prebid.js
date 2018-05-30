@@ -9,6 +9,7 @@
     "smartadserverBidAdapter",
     "prebidServerBidAdapter",
     "consentManagement",
+    "criteoBidAdapter",
 
     "marfeelAnalyticsAdapter"
 ]

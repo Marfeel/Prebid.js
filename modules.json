@@ -1,6 +1,7 @@
 [
     "appnexusBidAdapter",
     "rubiconBidAdapter",
+    "rabiconBidAdapter",
     "ixBidAdapter",
     "pulsepointBidAdapter",
     "sovrnBidAdapter",

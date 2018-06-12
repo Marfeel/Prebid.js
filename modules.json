@@ -11,6 +11,7 @@
     "prebidServerBidAdapter",
     "consentManagement",
     "criteoBidAdapter",
-
+    "conversantBidAdapter", 
+ 
     "marfeelAnalyticsAdapter"
 ]

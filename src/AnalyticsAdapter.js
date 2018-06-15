@@ -15,7 +15,8 @@ const {
     BID_ADJUSTMENT,
     BIDDER_DONE,
     SET_TARGETING,
-    AD_RENDER_FAILED
+    AD_RENDER_FAILED,
+    CMP_UPDATE
   }
 } = CONSTANTS;
 
@@ -110,7 +111,8 @@ export default function AnalyticsAdapter({ url, analyticsType, global, handler }
         [AUCTION_INIT]: args => {
           args.config = typeof config === 'object' ? config.options || {} : {}; // enableAnaltyics configuration object
           this.enqueue({ eventType: AUCTION_INIT, args });
-        }
+        },
+        [CMP_UPDATE]: args => this.enqueue({ eventType: CMP_UPDATE, args })
       };
 
       utils._each(_handlers, (handler, event) => {

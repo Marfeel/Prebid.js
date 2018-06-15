@@ -57,12 +57,17 @@ let marfeelAnalyticsAdapter = Object.assign(adapter({url, analyticsType}),
       } else if (eventType === AUCTION_END) {
         auctionEnd(auctions[args.auctionId], args);
 <<<<<<< HEAD
+<<<<<<< HEAD
       } else if (eventType === CONSENT_UPDATE) {
         registerCMPState(args);
       } else if (eventType === ERROR_SECURE_CREATIVE) {
         sendErrorEvent(eventType, args);
 =======
 >>>>>>> Marfeel 1.9
+=======
+      } else if (eventType === CONSENT_UPDATE) {
+        registerCMPState(args);
+>>>>>>> CMP behavior: events emits (#11)
       }
     },
 

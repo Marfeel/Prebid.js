@@ -12,12 +12,18 @@ let AUCTION_INIT = CONSTANTS.EVENTS.AUCTION_INIT;
 let AUCTION_END = CONSTANTS.EVENTS.AUCTION_END;
 let BID_WON = CONSTANTS.EVENTS.BID_WON;
 let BID_RESPONSE = CONSTANTS.EVENTS.BID_RESPONSE;
+let CONSENT_UPDATE = CONSTANTS.EVENTS.CMP_UPDATE;
+
 let auctions = {};
 
 function auctionEnd(auction, {timedOut}) {
   if (timedOut) auction.timedOut = true;
 
   window.mrfpb && window.mrfpb.trackAuction(auction)
+}
+
+function registerCMPState(state) {
+  window.mrfpb && window.mrfpb.setCMPState && window.mrfpb.setCMPState(state);
 }
 
 function registerWinner(auction, args) {
@@ -41,6 +47,8 @@ let marfeelAnalyticsAdapter = Object.assign(adapter({url, analyticsType}),
         registerWinner(auctions[args.auctionId], args);
       } else if (eventType === AUCTION_END) {
         auctionEnd(auctions[args.auctionId], args);
+      } else if (eventType === CONSENT_UPDATE) {
+        registerCMPState(args);
       }
     },
 

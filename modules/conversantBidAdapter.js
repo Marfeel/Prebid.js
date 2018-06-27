@@ -72,6 +72,8 @@ export const spec = {
         displaymanagerver: VERSION
       };
 
+      const imps = [];
+
       copyOptProperty(bid.params, 'tag_id', imp, 'tagid');
 
       if (isVideoRequest(bid)) {
@@ -92,19 +94,23 @@ export const spec = {
 
         copyOptProperty(bid.params, 'position', banner, 'pos');
 
-        imp.banner = banner;
+        banner.format.forEach(size => {
+          let clonedImp = Object.assign({}, imp);
+          clonedImp.banner = {format: [size]};
+          imps.push(clonedImp);
+        });
       }
 
       if (bid.crumbs && bid.crumbs.pubcid) {
         pubcid = bid.crumbs.pubcid;
       }
 
-      return imp;
+      return imps;
     });
 
     const payload = {
       id: requestId,
-      imp: conversantImps,
+      imp: conversantImps[0],
       site: {
         id: siteId,
         mobile: document.querySelector('meta[name="viewport"][content*="width=device-width"]') !== null ? 1 : 0,

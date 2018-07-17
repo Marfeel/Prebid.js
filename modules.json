@@ -13,6 +13,7 @@
     "criteoBidAdapter",
     "conversantBidAdapter",
     "audienceNetworkBidAdapter", 
+    "currency",
  
     "marfeelAnalyticsAdapter"
 ]

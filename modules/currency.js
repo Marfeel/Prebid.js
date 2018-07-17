@@ -91,6 +91,9 @@ function errorSettingsRates(msg) {
   } else {
     utils.logError(msg);
   }
+
+  window.mrfpb && window.mrfpb.trackFailedCurrencyRequest &&
+    window.mrfpb.trackFailedCurrencyRequest(msg);
 }
 
 function initCurrency(url) {
@@ -162,6 +165,9 @@ export function addBidResponseHook(adUnitCode, bid, fn) {
   bidResponseQueue.push(wrapFunction(fn, this, arguments));
   if (!currencySupportEnabled || currencyRatesLoaded) {
     processBidResponseQueue();
+  } else {
+    window.mrfpb && window.mrfpb.trackCurrencyTimeout &&
+      window.mrfpb.trackCurrencyTimeout(`Currency timeout for bidder ${bidder}`);
   }
 }
 
@@ -172,7 +178,7 @@ function processBidResponseQueue() {
 }
 
 function wrapFunction(fn, context, params) {
-  return function() {
+  return function () {
     let bid = params[1];
     if (bid !== undefined && 'currency' in bid && 'cpm' in bid) {
       let fromCurrency = bid.currency;
@@ -185,7 +191,7 @@ function wrapFunction(fn, context, params) {
           bid.currency = adServerCurrency;
         }
         // used for analytics
-        bid.getCpmInNewCurrency = function(toCurrency) {
+        bid.getCpmInNewCurrency = function (toCurrency) {
           return (parseFloat(cpm) * getCurrencyConversion(fromCurrency, toCurrency)).toFixed(3);
         };
       } catch (e) {

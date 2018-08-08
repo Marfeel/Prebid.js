@@ -6,7 +6,6 @@
 import events from './events';
 import { fireNativeTrackers } from './native';
 import { EVENTS } from './constants';
-import { isSlotMatchingAdUnitCode } from './utils';
 import { auctionManager } from './auctionManager';
 import find from 'core-js/library/fn/array/find';
 
@@ -56,7 +55,6 @@ function sendAdToCreative(adObject, remoteDomain, source) {
   const { adId, ad, adUrl, width, height } = adObject;
 
   if (adId) {
-    // resizeRemoteCreative(adObject);
     source.postMessage(JSON.stringify({
       message: 'Prebid Response',
       ad,
@@ -66,15 +64,4 @@ function sendAdToCreative(adObject, remoteDomain, source) {
       height
     }), remoteDomain);
   }
-}
-
-function resizeRemoteCreative({ adUnitCode, width, height }) {
-  const allGoogleSlots = window.googletag.pubads().getSlots();
-  const googleSlotObject = find(allGoogleSlots.filter(isSlotMatchingAdUnitCode(adUnitCode)), slot => slot);
-  const iframe = document.getElementById(
-    googleSlotObject.getSlotElementId()
-  ).querySelector('iframe');
-
-  iframe.width = '' + width;
-  iframe.height = '' + height;
 }

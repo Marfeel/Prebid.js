@@ -26,7 +26,7 @@ function receiveMessage(ev) {
   }
 
   if (data && data.adId) {
-    const adObject = find(auctionManager.getBidsReceived(), function (bid) {
+    const adObject = find(auctionManager.getBidsReceived(), function(bid) {
       return bid.adId === data.adId;
     });
 
@@ -57,14 +57,17 @@ function sendAdToCreative(adObject, remoteDomain, source) {
 
   if (adId) {
     resizeRemoteCreative(adObject);
-    source.postMessage(JSON.stringify({
-      message: 'Prebid Response',
-      ad,
-      adUrl,
-      adId,
-      width,
-      height
-    }), remoteDomain);
+    source.postMessage(
+      JSON.stringify({
+        message: 'Prebid Response',
+        ad,
+        adUrl,
+        adId,
+        width,
+        height
+      }),
+      remoteDomain
+    );
   }
 }
 
@@ -76,7 +79,16 @@ function resizeRemoteCreative({ adUnitCode, width, height }) {
     elementStyle.height = height;
   });
   function getElementByAdUnit(elmType) {
-    return document.getElementById(find(window.googletag.pubads().getSlots().filter(isSlotMatchingAdUnitCode(adUnitCode)), slot => slot)
-      .getSlotElementId()).querySelector(elmType);
+    return document
+      .getElementById(
+        find(
+          window.googletag
+            .pubads()
+            .getSlots()
+            .filter(isSlotMatchingAdUnitCode(adUnitCode)),
+          slot => slot
+        ).getSlotElementId()
+      )
+      .querySelector(elmType);
   }
 }

@@ -6,6 +6,7 @@
 import events from './events';
 import { fireNativeTrackers } from './native';
 import { EVENTS } from './constants';
+import { isSlotMatchingAdUnitCode } from './utils';
 import { auctionManager } from './auctionManager';
 import find from 'core-js/library/fn/array/find';
 
@@ -24,8 +25,8 @@ function receiveMessage(ev) {
     return;
   }
 
-  if (data.adId) {
-    const adObject = find(auctionManager.getBidsReceived(), function (bid) {
+  if (data && data.adId) {
+    const adObject = find(auctionManager.getBidsReceived(), function(bid) {
       return bid.adId === data.adId;
     });
 
@@ -55,13 +56,39 @@ function sendAdToCreative(adObject, remoteDomain, source) {
   const { adId, ad, adUrl, width, height } = adObject;
 
   if (adId) {
-    source.postMessage(JSON.stringify({
-      message: 'Prebid Response',
-      ad,
-      adUrl,
-      adId,
-      width,
-      height
-    }), remoteDomain);
+    resizeRemoteCreative(adObject);
+    source.postMessage(
+      JSON.stringify({
+        message: 'Prebid Response',
+        ad,
+        adUrl,
+        adId,
+        width,
+        height
+      }),
+      remoteDomain
+    );
+  }
+}
+
+function resizeRemoteCreative({ adUnitCode, width, height }) {
+  // resize both container div + iframe
+  ['div', 'iframe'].forEach(elmType => {
+    let elementStyle = getElementByAdUnit(elmType).style;
+    elementStyle.width = width;
+    elementStyle.height = height;
+  });
+  function getElementByAdUnit(elmType) {
+    return document
+      .getElementById(
+        find(
+          window.googletag
+            .pubads()
+            .getSlots()
+            .filter(isSlotMatchingAdUnitCode(adUnitCode)),
+          slot => slot
+        ).getSlotElementId()
+      )
+      .querySelector(elmType);
   }
 }

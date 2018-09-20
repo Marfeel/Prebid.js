@@ -4,6 +4,7 @@
   "description": "Header Bidding Management Library",
   "main": "src/prebid.js",
   "scripts": {
+    "build": "gulp build --modules=modules.json",
     "test": "gulp run-tests",
     "lint": "gulp lint"
   },

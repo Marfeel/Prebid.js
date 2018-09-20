@@ -1,0 +1,56 @@
+pipeline {
+    agent { node { label 'docker' } }
+    environment {
+       COMPOSE_PROJECT_NAME = "${env.JOB_NAME}_${env.BUILD_ID}"
+    }
+
+    stages {
+        stage('Docker build and start') {
+            steps {
+                sh 'docker-compose -f ci/docker-compose.yml up -d'
+                sh 'docker-compose -f ci/docker-compose.yml ps'
+            }
+        }
+        stage('install node dependencies') {
+            steps { 
+                sh "docker-compose -f ci/docker-compose.yml exec -T node_app npm i"
+            }             
+        }
+        stage('npm run build') {
+            steps {
+                sh "docker-compose -f ci/docker-compose.yml exec -T node_app npm run build"
+            
+            }
+        }
+        stage('npm run test') {
+            steps {
+                sh "docker-compose -f ci/docker-compose.yml exec -T node_app npm run test"
+            }
+        }
+        stage('Archive artifacts') {
+            when {
+                expression {
+                    return env.GIT_BRANCH == "origin/marfeel-build"
+                }
+            }
+            steps {
+                archiveArtifacts(
+                        artifacts: 'build/dist/*',
+                        defaultExcludes: true,
+                        caseSensitive: true
+                    )
+            }
+        }
+    }
+    post {
+      always {
+          sh "docker-compose -f ci/docker-compose.yml down || true"
+          sh 'echo "Job ran @ ${JENKINS_NODE_NAME}"'
+      }
+    }
+  options {
+    buildDiscarder(logRotator(daysToKeepStr:'60'))
+    timeout(time: 60, unit: 'MINUTES')
+    timestamps() 
+  }
+}

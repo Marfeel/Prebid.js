@@ -16,15 +16,14 @@ pipeline {
                 sh "docker-compose -f ci/docker-compose.yml exec -T node_app npm i"
             }             
         }
-        stage('npm run build') {
-            steps {
-                sh "docker-compose -f ci/docker-compose.yml exec -T node_app npm run build"
-            
-            }
-        }
         stage('npm run test') {
             steps {
                 sh "docker-compose -f ci/docker-compose.yml exec -T node_app npm run test"
+            }
+        }
+        stage('npm run build') {
+            steps {
+                sh "docker-compose -f ci/docker-compose.yml exec -T node_app npm run build"
             }
         }
         stage('Archive artifacts') {
@@ -35,7 +34,7 @@ pipeline {
             }
             steps {
                 archiveArtifacts(
-                        artifacts: 'build/dist/*',
+                        artifacts: 'build/dist/prebid.js',
                         defaultExcludes: true,
                         caseSensitive: true
                     )

@@ -92,6 +92,12 @@ function setBrowsers(karmaConf, browserstack) {
     karmaConf.customLaunchers = require('./browsers.json')
     karmaConf.browsers = Object.keys(karmaConf.customLaunchers);
   } else {
+    karmaConf.customLaunchers = {
+      ChromeHeadlessNoSandbox: {
+        base: 'ChromeHeadless',
+        flags: ['--no-sandbox']
+      }
+    };
     karmaConf.browsers = ['ChromeHeadlessNoSandbox'];
   }
 }

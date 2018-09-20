@@ -78,9 +78,5 @@
     "browser": "iphone",
     "device": "iPhone 6",
     "browser_version": null
-  },
-  "ChromeHeadlessNoSandbox": {
-    "base": "ChromeHeadless",
-    "flags": ["--no-sandbox"]
   }
 }

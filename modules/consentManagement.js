@@ -97,7 +97,7 @@ function lookupIabConsent(cmpSuccess, cmpError, hookConfig) {
   }
 
   function inASafeFrame() {
-    return !!(window.$sf && window.$sf.ext);
+    return (window.$sf && window.$sf.ext);
   }
 
   function callCmpWhileInSafeFrame(commandName, callback) {

@@ -1,9 +1,6 @@
 import adapter from 'src/AnalyticsAdapter';
 import CONSTANTS from 'src/constants.json';
 import adaptermanager from 'src/adaptermanager';
-import includes from 'core-js/library/fn/array/includes';
-
-const utils = require('src/utils');
 
 const url = '//pa.rxthdr.com/analytic';
 const analyticsType = 'endpoint';

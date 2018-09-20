@@ -269,7 +269,7 @@ function storeConsentData(cmpConsentObject) {
   };
   gdprDataHandler.setConsentData(consentData);
 
-  if (!!consentData.vendorData) {
+  if (consentData.vendorData) {
     consentData.vendorData.timeout = false;
     events.emit(EVENTS.CMP_UPDATE, consentData.vendorData);
   }

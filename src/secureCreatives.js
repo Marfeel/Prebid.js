@@ -12,6 +12,7 @@ import find from 'core-js/library/fn/array/find';
 
 const BID_WON = EVENTS.BID_WON;
 const ERROR_SECURE_CREATIVE = EVENTS.ERROR_SECURE_CREATIVE;
+
 export function listenMessagesFromCreative() {
   addEventListener('message', receiveMessage, false);
 }
@@ -39,15 +40,12 @@ function receiveMessage(ev) {
           source: ev.source
         });
       }
-
       if (typeof ev.source === 'undefined') {
         events.emit(ERROR_SECURE_CREATIVE, {
           msg: 'event source is undefined',
           data,
           adObject
         });
-        // track something
-        // the iframe was removed before we treated it ? => this could happen after a lot of swiping!
       }
       if (typeof adObject === 'undefined') {
         events.emit(ERROR_SECURE_CREATIVE, {
@@ -55,8 +53,6 @@ function receiveMessage(ev) {
           data,
           source: ev.source
         });
-        // track something.
-        // It would mean I have sent the wrong adId ? -> If I have sent any!
       }
 
       sendAdToCreative(adObject, data.adServerDomain, ev.source);
@@ -66,8 +62,6 @@ function receiveMessage(ev) {
 
       events.emit(BID_WON, adObject);
     }
-
-    // adObject might be undefined
 
     // handle this script from native template in an ad server
     // window.parent.postMessage(JSON.stringify({

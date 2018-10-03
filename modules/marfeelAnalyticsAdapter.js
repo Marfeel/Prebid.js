@@ -41,7 +41,7 @@ function sendErrorEvent(errorType, payload) {
     category: errorType
   };
   Object.assign(errorObject, payload);
-  window.mrfpb && window.mrfpb.trackError(errorObject);
+  window.mrfpb && window.mrfpb.trackError && window.mrfpb.trackError(errorObject);
 }
 
 let marfeelAnalyticsAdapter = Object.assign(adapter({url, analyticsType}),

@@ -11,7 +11,7 @@ import { auctionManager } from './auctionManager';
 import find from 'core-js/library/fn/array/find';
 
 const BID_WON = EVENTS.BID_WON;
-
+const ERROR_SECURE_CREATIVE = EVENTS.ERROR_SECURE_CREATIVE;
 export function listenMessagesFromCreative() {
   addEventListener('message', receiveMessage, false);
 }
@@ -31,6 +31,34 @@ function receiveMessage(ev) {
     });
 
     if (data.message === 'Prebid Request') {
+      if (data.adServerDomain === null) {
+        events.emit(ERROR_SECURE_CREATIVE, {
+          msg: 'adServerDomain is null',
+          data,
+          adObject,
+          source: ev.source
+        });
+      }
+
+      if (typeof ev.source === 'undefined') {
+        events.emit(ERROR_SECURE_CREATIVE, {
+          msg: 'event source is undefined',
+          data,
+          adObject
+        });
+        // track something
+        // the iframe was removed before we treated it ? => this could happen after a lot of swiping!
+      }
+      if (typeof adObject === 'undefined') {
+        events.emit(ERROR_SECURE_CREATIVE, {
+          msg: 'adObject is undefined',
+          data,
+          source: ev.source
+        });
+        // track something.
+        // It would mean I have sent the wrong adId ? -> If I have sent any!
+      }
+
       sendAdToCreative(adObject, data.adServerDomain, ev.source);
 
       // save winning bids
@@ -38,6 +66,8 @@ function receiveMessage(ev) {
 
       events.emit(BID_WON, adObject);
     }
+
+    // adObject might be undefined
 
     // handle this script from native template in an ad server
     // window.parent.postMessage(JSON.stringify({
@@ -74,21 +104,43 @@ function sendAdToCreative(adObject, remoteDomain, source) {
 function resizeRemoteCreative({ adUnitCode, width, height }) {
   // resize both container div + iframe
   ['div', 'iframe'].forEach(elmType => {
-    let elementStyle = getElementByAdUnit(elmType).style;
-    elementStyle.width = `${width}px`;
-    elementStyle.height = `${height}px`;
+    const element = getElementByAdUnit(elmType);
+    if (typeof element !== 'undefined') {
+      if (element === null) {
+        events.emit(ERROR_SECURE_CREATIVE, {
+          msg: 'No element of type "elmType" for adUnit',
+          adUnitCode,
+          elmType,
+          width,
+          height
+        });
+      } else {
+        let elementStyle = element.style;
+        elementStyle.width = `${width}px`;
+        elementStyle.height = `${height}px`;
+      }
+    }
   });
   function getElementByAdUnit(elmType) {
-    return document
-      .getElementById(
-        find(
-          window.googletag
-            .pubads()
-            .getSlots()
-            .filter(isSlotMatchingAdUnitCode(adUnitCode)),
-          slot => slot
-        ).getSlotElementId()
-      )
-      .querySelector(elmType);
+    const element = document.getElementById(
+      find(
+        window.googletag
+          .pubads()
+          .getSlots()
+          .filter(isSlotMatchingAdUnitCode(adUnitCode)),
+        slot => slot
+      ).getSlotElementId()
+    );
+
+    if (element === null) {
+      events.emit(ERROR_SECURE_CREATIVE, {
+        msg: 'No element for adUnit',
+        adUnitCode,
+        elmType,
+        slotsOnPage: window.googletag.pubads().getSlots().length
+      });
+      return;
+    }
+    return element.querySelector(elmType);
   }
 }

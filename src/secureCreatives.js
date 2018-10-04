@@ -98,9 +98,9 @@ function sendAdToCreative(adObject, remoteDomain, source) {
 function resizeRemoteCreative({ adUnitCode, width, height }) {
   // resize both container div + iframe
   ['div', 'iframe'].forEach(elmType => {
-    const element = getElementByAdUnit(elmType);
-    if (typeof element !== 'undefined') {
-      if (element === null) {
+    const nestedElement = getElementByAdUnit(elmType);
+    if (typeof nestedElement !== 'undefined') {
+      if (nestedElement === null) {
         events.emit(ERROR_SECURE_CREATIVE, {
           msg: 'No element of type "elmType" for adUnit',
           adUnitCode,
@@ -109,14 +109,14 @@ function resizeRemoteCreative({ adUnitCode, width, height }) {
           height
         });
       } else {
-        let elementStyle = element.style;
+        let elementStyle = nestedElement.style;
         elementStyle.width = `${width}px`;
         elementStyle.height = `${height}px`;
       }
     }
   });
   function getElementByAdUnit(elmType) {
-    const element = document.getElementById(
+    const containerElement = document.getElementById(
       find(
         window.googletag
           .pubads()
@@ -126,7 +126,7 @@ function resizeRemoteCreative({ adUnitCode, width, height }) {
       ).getSlotElementId()
     );
 
-    if (element === null) {
+    if (containerElement === null) {
       events.emit(ERROR_SECURE_CREATIVE, {
         msg: 'No element for adUnit',
         adUnitCode,
@@ -135,6 +135,6 @@ function resizeRemoteCreative({ adUnitCode, width, height }) {
       });
       return;
     }
-    return element.querySelector(elmType);
+    return containerElement.querySelector(elmType);
   }
 }

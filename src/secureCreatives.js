@@ -11,6 +11,7 @@ import { auctionManager } from './auctionManager';
 import find from 'core-js/library/fn/array/find';
 
 const BID_WON = EVENTS.BID_WON;
+const ERROR_SECURE_CREATIVE = EVENTS.ERROR_SECURE_CREATIVE;
 
 export function listenMessagesFromCreative() {
   addEventListener('message', receiveMessage, false);
@@ -31,6 +32,29 @@ function receiveMessage(ev) {
     });
 
     if (data.message === 'Prebid Request') {
+      if (data.adServerDomain === null) {
+        events.emit(ERROR_SECURE_CREATIVE, {
+          msg: 'adServerDomain is null',
+          data,
+          adObject,
+          source: ev.source
+        });
+      }
+      if (typeof ev.source === 'undefined') {
+        events.emit(ERROR_SECURE_CREATIVE, {
+          msg: 'event source is undefined',
+          data,
+          adObject
+        });
+      }
+      if (typeof adObject === 'undefined') {
+        events.emit(ERROR_SECURE_CREATIVE, {
+          msg: 'adObject is undefined',
+          data,
+          source: ev.source
+        });
+      }
+
       sendAdToCreative(adObject, data.adServerDomain, ev.source);
 
       // save winning bids
@@ -74,21 +98,43 @@ function sendAdToCreative(adObject, remoteDomain, source) {
 function resizeRemoteCreative({ adUnitCode, width, height }) {
   // resize both container div + iframe
   ['div', 'iframe'].forEach(elmType => {
-    let elementStyle = getElementByAdUnit(elmType).style;
-    elementStyle.width = `${width}px`;
-    elementStyle.height = `${height}px`;
+    const nestedElement = getElementByAdUnit(elmType);
+    if (typeof nestedElement !== 'undefined') {
+      if (nestedElement === null) {
+        events.emit(ERROR_SECURE_CREATIVE, {
+          msg: 'No element of type "elmType" for adUnit',
+          adUnitCode,
+          elmType,
+          width,
+          height
+        });
+      } else {
+        let elementStyle = nestedElement.style;
+        elementStyle.width = `${width}px`;
+        elementStyle.height = `${height}px`;
+      }
+    }
   });
   function getElementByAdUnit(elmType) {
-    return document
-      .getElementById(
-        find(
-          window.googletag
-            .pubads()
-            .getSlots()
-            .filter(isSlotMatchingAdUnitCode(adUnitCode)),
-          slot => slot
-        ).getSlotElementId()
-      )
-      .querySelector(elmType);
+    const containerElement = document.getElementById(
+      find(
+        window.googletag
+          .pubads()
+          .getSlots()
+          .filter(isSlotMatchingAdUnitCode(adUnitCode)),
+        slot => slot
+      ).getSlotElementId()
+    );
+
+    if (containerElement === null) {
+      events.emit(ERROR_SECURE_CREATIVE, {
+        msg: 'No element for adUnit',
+        adUnitCode,
+        elmType,
+        slotsOnPage: window.googletag.pubads().getSlots().length
+      });
+      return;
+    }
+    return containerElement.querySelector(elmType);
   }
 }

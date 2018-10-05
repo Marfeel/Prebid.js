@@ -36,7 +36,8 @@
     "REQUEST_BIDS": "requestBids",
     "ADD_AD_UNITS": "addAdUnits",
     "AD_RENDER_FAILED" : "adRenderFailed",
-    "CMP_UPDATE": "consentUpdate"
+	"CMP_UPDATE": "consentUpdate",
+	"ERROR_SECURE_CREATIVE": "secureCreative"
   },
   "AD_RENDER_FAILED_REASON" : {
     "PREVENT_WRITING_ON_MAIN_DOCUMENT": "preventWritingOnMainDocuemnt",

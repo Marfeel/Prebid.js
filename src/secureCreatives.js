@@ -32,6 +32,29 @@ function receiveMessage(ev) {
     });
 
     if (data.message === 'Prebid Request') {
+      if (data.adServerDomain === null) {
+        events.emit(ERROR_SECURE_CREATIVE, {
+          msg: 'adServerDomain is null',
+          data,
+          adObject,
+          source: ev.source
+        });
+      }
+      if (typeof ev.source === 'undefined') {
+        events.emit(ERROR_SECURE_CREATIVE, {
+          msg: 'event source is undefined',
+          data,
+          adObject
+        });
+      }
+      if (typeof adObject === 'undefined') {
+        events.emit(ERROR_SECURE_CREATIVE, {
+          msg: 'adObject is undefined',
+          data,
+          source: ev.source
+        });
+      }
+
       if (typeof ev.source !== 'undefined') {
         sendAdToCreative(adObject, data.adServerDomain, ev.source);
 
@@ -81,38 +104,44 @@ function sendAdToCreative(adObject, remoteDomain, source) {
 function resizeRemoteCreative({ adUnitCode, width, height }) {
   // resize both container div + iframe
   ['div', 'iframe'].forEach(elmType => {
-    let element = getElementByAdUnit(elmType);
-    if (element) {
-      let elementStyle = element.style;
-      elementStyle.width = width + 'px';
-      elementStyle.height = height + 'px';
-    } else {
-      logWarn(`Unable to locate matching page element for adUnitCode ${adUnitCode}.  Can't resize it to ad's dimensions.  Please review setup.`);
+    const nestedElement = getElementByAdUnit(elmType);
+    if (typeof nestedElement !== 'undefined') {
+      if (nestedElement === null) {
+        events.emit(ERROR_SECURE_CREATIVE, {
+          msg: 'No element of type "elmType" for adUnit',
+          adUnitCode,
+          elmType,
+          width,
+          height
+        });
+      } else {
+        let elementStyle = nestedElement.style;
+        elementStyle.width = `${width}px`;
+        elementStyle.height = `${height}px`;
+      }
     }
   });
 
   function getElementByAdUnit(elmType) {
-    let id = getElementIdBasedOnAdServer(adUnitCode);
-    let parentDivEle = document.getElementById(id);
-    return parentDivEle && parentDivEle.querySelector(elmType);
-  }
+    const containerElement = document.getElementById(
+      find(
+        window.googletag
+          .pubads()
+          .getSlots()
+          .filter(isSlotMatchingAdUnitCode(adUnitCode)),
+        slot => slot
+      ).getSlotElementId()
+    );
 
-  function getElementIdBasedOnAdServer(adUnitCode) {
-    if (window.googletag) {
-      return getDfpElementId(adUnitCode)
-    } else if (window.apntag) {
-      return getAstElementId(adUnitCode)
-    } else {
-      return adUnitCode;
+    if (containerElement === null) {
+      events.emit(ERROR_SECURE_CREATIVE, {
+        msg: 'No element for adUnit',
+        adUnitCode,
+        elmType,
+        slotsOnPage: window.googletag.pubads().getSlots().length
+      });
+      return;
     }
-  }
-
-  function getDfpElementId(adUnitCode) {
-    return find(window.googletag.pubads().getSlots().filter(isSlotMatchingAdUnitCode(adUnitCode)), slot => slot).getSlotElementId()
-  }
-
-  function getAstElementId(adUnitCode) {
-    let astTag = window.apntag.getTag(adUnitCode);
-    return astTag && astTag.targetId;
+    return containerElement.querySelector(elmType);
   }
 }

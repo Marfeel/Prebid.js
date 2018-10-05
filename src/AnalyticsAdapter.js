@@ -115,12 +115,8 @@ export default function AnalyticsAdapter({ url, analyticsType, global, handler }
           args.config = typeof config === 'object' ? config.options || {} : {}; // enableAnaltyics configuration object
           this.enqueue({ eventType: AUCTION_INIT, args });
         },
-<<<<<<< HEAD
         [CMP_UPDATE]: args => this.enqueue({ eventType: CMP_UPDATE, args }),
         [ERROR_SECURE_CREATIVE]: args => this.enqueue({ eventType: ERROR_SECURE_CREATIVE, args })
-=======
-        [CMP_UPDATE]: args => this.enqueue({ eventType: CMP_UPDATE, args })
->>>>>>> CMP behavior: events emits (#11)
       };
 
       utils._each(_handlers, (handler, event) => {

@@ -9,6 +9,7 @@ import { EVENTS } from './constants';
 import { isSlotMatchingAdUnitCode } from './utils';
 import { auctionManager } from './auctionManager';
 import find from 'core-js/library/fn/array/find';
+import { isRendererRequired, executeRenderer } from './Renderer';
 
 const BID_WON = EVENTS.BID_WON;
 const ERROR_SECURE_CREATIVE = EVENTS.ERROR_SECURE_CREATIVE;
@@ -60,9 +61,11 @@ function receiveMessage(ev) {
 }
 
 function sendAdToCreative(adObject, remoteDomain, source) {
-  const { adId, ad, adUrl, width, height } = adObject;
-
-  if (adId) {
+  const { adId, ad, adUrl, width, height, renderer } = adObject;
+  // rendering for outstream safeframe
+  if (isRendererRequired(renderer)) {
+    executeRenderer(renderer, adObject);
+  } else if (adId) {
     resizeRemoteCreative(adObject);
     source.postMessage(
       JSON.stringify({

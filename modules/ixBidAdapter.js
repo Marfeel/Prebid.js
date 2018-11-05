@@ -19,7 +19,7 @@ const NET_REVENUE = true;
 // actually HTTP.If we can guarantee it is, then, and only then, set protocol to
 // HTTP.
 let isSecureWeb = true;
-if (utils.getTopWindowLocation().protocol.indexOf('https') !== 0) {
+if (window.location.protocol === 'http:') {
   isSecureWeb = false;
 }
 const baseUrl = isSecureWeb ? BANNER_SECURE_BID_URL : BANNER_INSECURE_BID_URL;

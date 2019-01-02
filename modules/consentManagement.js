@@ -22,6 +22,7 @@ export let allowAuction;
 export let staticConsentData;
 
 let consentData;
+let addedConsentHook = false;
 
 // add new CMPs here, with their dedicated lookup function
 const cmpCallMap = {
@@ -58,11 +59,11 @@ function lookupIabConsent(cmpSuccess, cmpError, hookConfig) {
     }
 
     return {
-      consentDataCallback: function(consentResponse) {
+      consentDataCallback: function (consentResponse) {
         cmpResponse.getConsentData = consentResponse;
         afterEach();
       },
-      vendorConsentsCallback: function(consentResponse) {
+      vendorConsentsCallback: function (consentResponse) {
         cmpResponse.getVendorConsents = consentResponse;
         afterEach();
       }
@@ -84,7 +85,7 @@ function lookupIabConsent(cmpSuccess, cmpError, hookConfig) {
   // if the CMP is not found, the iframe function will call the cmpError exit callback to abort the rest of the CMP workflow
   try {
     cmpFunction = window.__cmp || utils.getWindowTop().__cmp;
-  } catch (e) {}
+  } catch (e) { }
 
   if (utils.isFn(cmpFunction)) {
     cmpFunction('getConsentData', null, callbackHandler.consentDataCallback);
@@ -99,7 +100,7 @@ function lookupIabConsent(cmpSuccess, cmpError, hookConfig) {
     while (!cmpFrame) {
       try {
         if (f.frames['__cmpLocator']) cmpFrame = f;
-      } catch (e) {}
+      } catch (e) { }
       if (f === window.top) break;
       f = f.parent;
     }
@@ -141,13 +142,15 @@ function lookupIabConsent(cmpSuccess, cmpError, hookConfig) {
   function callCmpWhileInIframe(commandName, cmpFrame, moduleCallback) {
     /* Setup up a __cmp function to do the postMessage and stash the callback.
       This function behaves (from the caller's perspective identicially to the in-frame __cmp call */
-    window.__cmp = function(cmd, arg, callback) {
+    window.__cmp = function (cmd, arg, callback) {
       let callId = Math.random() + '';
-      let msg = {__cmpCall: {
-        command: cmd,
-        parameter: arg,
-        callId: callId
-      }};
+      let msg = {
+        __cmpCall: {
+          command: cmd,
+          parameter: arg,
+          callId: callId
+        }
+      };
       cmpCallbacks[callId] = callback;
       cmpFrame.postMessage(msg, '*');
     }
@@ -379,6 +382,9 @@ export function setConfig(config) {
       utils.logError(`consentManagement config with cmpApi: 'static' did not specify consentData. No consents will be available to adapters.`);
     }
   }
-  $$PREBID_GLOBAL$$.requestBids.addHook(requestBidsHook, 50);
+  if (!addedConsentHook) {
+    $$PREBID_GLOBAL$$.requestBids.addHook(requestBidsHook, 50);
+  }
+  addedConsentHook = true;
 }
 config.getConfig('consentManagement', config => setConfig(config.consentManagement));

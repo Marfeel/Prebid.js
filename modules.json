@@ -13,5 +13,6 @@
     "consentManagement",
     "criteoBidAdapter",
     "audienceNetworkBidAdapter",
+    "currency",
     "marfeelAnalyticsAdapter"
 ]

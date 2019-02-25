@@ -73,7 +73,7 @@ adomikAdapter.sendTypedEvent = function() {
   const bulkEvents = {
     uid: adomikAdapter.currentContext.uid,
     ahbaid: adomikAdapter.currentContext.id,
-    hostname: window.location.hostname,
+    hostname: window.originalLocation.hostname,
     eventsByPlacementCode: groupedTypedEvents.map(function(typedEventsByType) {
       let sizes = [];
       const eventKeys = ['request', 'response', 'winner'];

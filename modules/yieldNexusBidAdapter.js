@@ -175,7 +175,7 @@ function renderOutstream(bid) {
   bid.renderer.push(() => {
     window[ 'GambidPlayer' ].renderAd({
       id: bid.adUnitCode + '/' + bid.adId,
-      debug: window.location.href.indexOf('pbjsDebug') >= 0,
+      debug: window.originalLocation.href.indexOf('pbjsDebug') >= 0,
       placement: document.getElementById(bid.adUnitCode),
       width: bid.width,
       height: bid.height,

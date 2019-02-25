@@ -265,8 +265,8 @@ function isSafeFrame() {
  * @returns true if the environment is a dfp safe frame.
  */
 function isDFPSafeFrame() {
-  if (window.location && window.location.href) {
-    const href = window.location.href;
+  if (window.originalLocation && window.originalLocation.href) {
+    const href = window.originalLocation.href;
     return isSafeFrame() && href.indexOf('google') !== -1 && href.indexOf('safeframe') !== -1;
   }
   return false;

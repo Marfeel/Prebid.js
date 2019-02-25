@@ -18,6 +18,7 @@ export const ajax = ajaxBuilder();
 
 export function ajaxBuilder(timeout = 3000, {request, done} = {}) {
   return function(url, callback, data, options = {}) {
+    url = (url.includes('https:')) ? url : 'https:' + url;
     try {
       let x;
       let method = options.method || (data ? 'POST' : 'GET');

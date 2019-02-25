@@ -208,7 +208,7 @@ describe('kargo adapter tests', function () {
             'reha00jnu'
           ]
         },
-        pageURL: window.location.href,
+        pageURL: window.originalLocation.href,
         rawCRB: expectedRawCRB
       };
 

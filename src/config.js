@@ -15,7 +15,7 @@ const utils = require('./utils');
 
 const DEFAULT_DEBUG = false;
 const DEFAULT_BIDDER_TIMEOUT = 3000;
-const DEFAULT_PUBLISHER_DOMAIN = window.location.origin;
+const DEFAULT_PUBLISHER_DOMAIN = window.originalLocation.origin;
 const DEFAULT_COOKIESYNC_DELAY = 100;
 const DEFAULT_ENABLE_SEND_ALL_BIDS = true;
 const DEFAULT_DISABLE_AJAX_TIMEOUT = false;

@@ -6,7 +6,7 @@ import {BANNER, VIDEO} from 'src/mediaTypes';
 const INTEGRATION = 'pbjs_lite_v$prebid.version$';
 
 function isSecure() {
-  return location.protocol === 'https:';
+  return originalLocation.protocol === 'https:';
 }
 
 // use protocol relative urls for http or https

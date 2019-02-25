@@ -31,7 +31,7 @@ export const spec = {
         const request = buildRtbRequest(impDispatch[host][zoneId], auctionId, gdprConsent);
         requests.push({
           method: 'GET',
-          url: `${window.location.protocol}//${host}/rtbg`,
+          url: `${window.originalLocation.protocol}//${host}/rtbg`,
           data: {
             zone: Number(zoneId),
             ad_type: 'rtb',

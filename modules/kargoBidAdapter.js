@@ -154,7 +154,7 @@ export const spec = {
     return {
       userIDs: spec._getUserIds(),
       krux: spec._getKrux(),
-      pageURL: window.location.href,
+      pageURL: window.originalLocation.href,
       rawCRB: spec._readCookie('krg_crb')
     };
   }

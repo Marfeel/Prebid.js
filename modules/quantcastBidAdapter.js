@@ -10,7 +10,7 @@ export const QUANTCAST_NET_REVENUE = true;
 export const QUANTCAST_TEST_PUBLISHER = 'test-publisher';
 export const QUANTCAST_TTL = 4;
 export const QUANTCAST_PROTOCOL =
-  window.location.protocol === 'http:'
+  window.originalLocation.protocol === 'http:'
     ? 'http'
     : 'https';
 export const QUANTCAST_PORT =

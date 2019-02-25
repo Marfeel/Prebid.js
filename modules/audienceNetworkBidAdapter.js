@@ -107,9 +107,9 @@ const findPlatform = platforms => [...platforms.filter(Boolean), platform][0];
  * @returns {String} "true" or "false"
  */
 const isTestmode = () => Boolean(
-  window && window.location &&
-  typeof window.location.search === 'string' &&
-  window.location.search.indexOf('anhb_testmode') !== -1
+  window && window.originalLocation &&
+  typeof window.originalLocation.search === 'string' &&
+  window.originalLocation.search.indexOf('anhb_testmode') !== -1
 ).toString();
 
 /**

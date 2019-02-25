@@ -63,7 +63,6 @@ function sendAdToCreative(adObject, remoteDomain, source) {
   const { adId, ad, adUrl, width, height } = adObject;
 
   if (adId) {
-    resizeRemoteCreative(adObject);
     source.postMessage(
       JSON.stringify({
         message: 'Prebid Response',
@@ -75,27 +74,5 @@ function sendAdToCreative(adObject, remoteDomain, source) {
       }),
       remoteDomain
     );
-  }
-}
-
-function resizeRemoteCreative({ adUnitCode, width, height }) {
-  // resize both container div + iframe
-  ['div', 'iframe'].forEach(elmType => {
-    let elementStyle = getElementByAdUnit(elmType).style;
-    elementStyle.width = `${width}px`;
-    elementStyle.height = `${height}px`;
-  });
-  function getElementByAdUnit(elmType) {
-    return document
-      .getElementById(
-        find(
-          window.googletag
-            .pubads()
-            .getSlots()
-            .filter(isSlotMatchingAdUnitCode(adUnitCode)),
-          slot => slot
-        ).getSlotElementId()
-      )
-      .querySelector(elmType);
   }
 }

@@ -5,7 +5,7 @@ import { BANNER, NATIVE, VIDEO } from 'src/mediaTypes';
 import find from 'core-js/library/fn/array/find';
 import includes from 'core-js/library/fn/array/includes';
 
-const BIDDER_CODE = 'appnexus';
+const BIDDER_CODE = 'appnexus_client';
 const URL = '//ib.adnxs.com/ut/v3/prebid';
 const VIDEO_TARGETING = ['id', 'mimes', 'minduration', 'maxduration',
   'startdelay', 'skippable', 'playback_method', 'frameworks'];

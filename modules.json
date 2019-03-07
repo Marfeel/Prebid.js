@@ -1,6 +1,7 @@
 [
     "appnexusBidAdapter",
     "appnexusClientBidAdapter",
+    "emx_digitalBidAdapter",
     "rubiconBidAdapter",
     "rabiconBidAdapter",
     "ixBidAdapter",

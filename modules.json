@@ -1,4 +1,5 @@
 [
+    "33acrossBidAdapter",
     "appnexusBidAdapter",
     "appnexusClientBidAdapter",
     "rubiconBidAdapter",
@@ -7,6 +8,7 @@
     "pulsepointBidAdapter",
     "sovrnBidAdapter",
     "openxBidAdapter",
+    "openxClientBidAdapter",
 	"pubmaticBidAdapter",
 	"pubmaticClientBidAdapter",
     "smartadserverBidAdapter",

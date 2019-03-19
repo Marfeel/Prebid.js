@@ -24,29 +24,6 @@ const CUSTOM_PARAMS = {
   verId: '' // OpenWrap Legacy: version ID
 };
 const DATA_TYPES = {
-<<<<<<< HEAD
-  NUMBER: 'number',
-  STRING: 'string',
-  BOOLEAN: 'boolean',
-  ARRAY: 'array'
-};
-const VIDEO_CUSTOM_PARAMS = {
-  mimes: DATA_TYPES.ARRAY,
-  minduration: DATA_TYPES.NUMBER,
-  maxduration: DATA_TYPES.NUMBER,
-  startdelay: DATA_TYPES.NUMBER,
-  playbackmethod: DATA_TYPES.ARRAY,
-  api: DATA_TYPES.ARRAY,
-  protocols: DATA_TYPES.ARRAY,
-  w: DATA_TYPES.NUMBER,
-  h: DATA_TYPES.NUMBER,
-  battr: DATA_TYPES.ARRAY,
-  linearity: DATA_TYPES.NUMBER,
-  placement: DATA_TYPES.NUMBER,
-  minbitrate: DATA_TYPES.NUMBER,
-  maxbitrate: DATA_TYPES.NUMBER
-};
-=======
   'NUMBER': 'number',
   'STRING': 'string',
   'BOOLEAN': 'boolean',
@@ -180,7 +157,6 @@ const NATIVE_MINIMUM_REQUIRED_IMAGE_ASSETS = [
   }
 ]
 
->>>>>>> Support for Native in Pubmatic Adapter (#3408)
 const NET_REVENUE = false;
 const dealChannelValues = {
   1: 'PMP',
@@ -846,7 +822,6 @@ export const spec = {
   isBidRequestValid: bid => {
     if (bid && bid.params) {
       if (!utils.isStr(bid.params.publisherId)) {
-<<<<<<< HEAD
         utils.logWarn(
           BIDDER_CODE +
             ' Error: publisherId is mandatory and cannot be numeric. Call to OpenBid will not be sent.'
@@ -854,35 +829,17 @@ export const spec = {
         return false;
       }
       if (!utils.isStr(bid.params.adSlot)) {
-        utils.logWarn(
-          BIDDER_CODE +
-            ': adSlotId is mandatory and cannot be numeric. Call to OpenBid will not be sent.'
-        );
-=======
         utils.logWarn(BIDDER_CODE + ' Error: publisherId is mandatory and cannot be numeric. Call to OpenBid will not be sent for ad unit: ' + JSON.stringify(bid));
         return false;
       }
       if (!utils.isStr(bid.params.adSlot)) {
         utils.logWarn(BIDDER_CODE + ': adSlotId is mandatory and cannot be numeric. Call to OpenBid will not be sent for ad unit: ' + JSON.stringify(bid));
->>>>>>> Support for Native in Pubmatic Adapter (#3408)
         return false;
       }
       // video ad validation
       if (bid.params.hasOwnProperty('video')) {
-<<<<<<< HEAD
-        if (
-          !bid.params.video.hasOwnProperty('mimes') ||
-          !utils.isArray(bid.params.video.mimes) ||
-          bid.params.video.mimes.length === 0
-        ) {
-          utils.logWarn(
-            BIDDER_CODE +
-              ': For video ads, mimes is mandatory and must specify atlease 1 mime value. Call to OpenBid will not be sent.'
-          );
-=======
         if (!bid.params.video.hasOwnProperty('mimes') || !utils.isArray(bid.params.video.mimes) || bid.params.video.mimes.length === 0) {
           utils.logWarn(BIDDER_CODE + ': For video ads, mimes is mandatory and must specify atlease 1 mime value. Call to OpenBid will not be sent for ad unit:' + JSON.stringify(bid));
->>>>>>> Support for Native in Pubmatic Adapter (#3408)
           return false;
         }
       }
@@ -898,20 +855,16 @@ export const spec = {
    * @return ServerRequest Info describing the request to the server.
    */
   buildRequests: (validBidRequests, bidderRequest) => {
-<<<<<<< HEAD
-    var conf = _initConf();
-    var payload = _createOrtbTemplate(
-      conf,
-      validBidRequests[0].params.referrer
-    );
-=======
     var refererInfo;
     if (bidderRequest && bidderRequest.refererInfo) {
       refererInfo = bidderRequest.refererInfo;
     }
     var conf = _initConf(refererInfo);
-    var payload = _createOrtbTemplate(conf);
->>>>>>> Support for Native in Pubmatic Adapter (#3408)
+    var payload = _createOrtbTemplate(
+      conf,
+      validBidRequests[0].params.referrer
+    );
+
     var bidCurrency = '';
     var dctr = '';
     var dctrLen;
@@ -921,33 +874,6 @@ export const spec = {
       bid = utils.deepClone(originalBid);
       _parseAdSlot(bid);
       if (bid.params.hasOwnProperty('video')) {
-<<<<<<< HEAD
-        if (
-          !(bid.params.adSlot && bid.params.adUnit && bid.params.adUnitIndex)
-        ) {
-          utils.logWarn(
-            BIDDER_CODE + ': Skipping the non-standard adslot: ',
-            bid.params.adSlot,
-            bid
-          );
-          return;
-        }
-      } else {
-        if (
-          !(
-            bid.params.adSlot &&
-            bid.params.adUnit &&
-            bid.params.adUnitIndex &&
-            bid.params.width &&
-            bid.params.height
-          )
-        ) {
-          utils.logWarn(
-            BIDDER_CODE + ': Skipping the non-standard adslot: ',
-            bid.params.adSlot,
-            bid
-          );
-=======
         if (!(bid.params.adSlot && bid.params.adUnit && bid.params.adUnitIndex)) {
           utils.logWarn(BIDDER_CODE + ': Skipping the non-standard adslot: ', bid.params.adSlot, JSON.stringify(bid));
           return;
@@ -955,7 +881,6 @@ export const spec = {
       } else {
         if (!(bid.params.adSlot && bid.params.adUnit && bid.params.adUnitIndex && bid.params.width && bid.params.height)) {
           utils.logWarn(BIDDER_CODE + ': Skipping the non-standard adslot: ', bid.params.adSlot, JSON.stringify(bid));
->>>>>>> Support for Native in Pubmatic Adapter (#3408)
           return;
         }
       }
@@ -1023,42 +948,6 @@ export const spec = {
     payload.site.domain = _getDomainFromURL(payload.site.page);
 
     // set dctr value in site.ext, if present in validBidRequests[0], else ignore
-<<<<<<< HEAD
-    if (validBidRequests[0].params.hasOwnProperty('dctr')) {
-      dctr = validBidRequests[0].params.dctr;
-      if (utils.isStr(dctr) && dctr.length > 0) {
-        var arr = dctr.split('|');
-        dctr = '';
-        arr.forEach(val => {
-          dctr += val.length > 0 ? val.trim() + '|' : '';
-        });
-        dctrLen = dctr.length;
-        if (dctr.substring(dctrLen, dctrLen - 1) === '|') {
-          dctr = dctr.substring(0, dctrLen - 1);
-        }
-        payload.site.ext = {
-          key_val: dctr.trim()
-        };
-      } else {
-        utils.logWarn(
-          BIDDER_CODE +
-            ': Ignoring param : dctr with value : ' +
-            dctr +
-            ', expects string-value, found empty or non-string value'
-        );
-      }
-      if (dctrArr.length > 1) {
-        utils.logWarn(
-          BIDDER_CODE +
-            ': dctr value found in more than 1 adunits. Value from 1st adunit will be picked. Ignoring values from subsequent adunits'
-        );
-      }
-    } else {
-      utils.logWarn(
-        BIDDER_CODE +
-          ': dctr value not found in 1st adunit, ignoring values from subsequent adunits'
-      );
-=======
     if (dctrArr.length > 0) {
       if (validBidRequests[0].params.hasOwnProperty('dctr')) {
         dctr = validBidRequests[0].params.dctr;
@@ -1084,7 +973,6 @@ export const spec = {
       } else {
         utils.logWarn(BIDDER_CODE + ': dctr value not found in 1st adunit, ignoring values from subsequent adunits');
       }
->>>>>>> Dctr fixes (#3337)
     }
 
     _handleEids(payload);
@@ -1116,10 +1004,7 @@ export const spec = {
           seatbidder.bid &&
             utils.isArray(seatbidder.bid) &&
             seatbidder.bid.forEach(bid => {
-<<<<<<< HEAD
-=======
               let parsedRequest = JSON.parse(request.data);
->>>>>>> Support for Native in Pubmatic Adapter (#3408)
               let newBid = {
                 requestId: bid.impid,
                 cpm: (parseFloat(bid.price) || 0).toFixed(2),
@@ -1130,35 +1015,13 @@ export const spec = {
                 currency: respCur,
                 netRevenue: NET_REVENUE,
                 ttl: 300,
-<<<<<<< HEAD
-                referrer: utils.getTopWindowUrl(),
-                ad: bid.adm
-              };
-              let parsedRequest = JSON.parse(request.data);
-=======
                 referrer: parsedRequest.site && parsedRequest.site.ref ? parsedRequest.site.ref : '',
                 ad: bid.adm
               };
->>>>>>> Support for Native in Pubmatic Adapter (#3408)
               if (parsedRequest.imp && parsedRequest.imp.length > 0) {
                 parsedRequest.imp.forEach(req => {
                   if (bid.impid === req.id && req.hasOwnProperty('video')) {
                     newBid.mediaType = 'video';
-<<<<<<< HEAD
-                    newBid.width = bid.hasOwnProperty('w')
-                      ? bid.w
-                      : req.video.w;
-                    newBid.height = bid.hasOwnProperty('h')
-                      ? bid.h
-                      : req.video.h;
-                    newBid.vastXml = bid.adm;
-                  }
-                });
-              }
-              if (bid.ext && bid.ext.deal_channel) {
-                newBid['dealChannel'] =
-                  dealChannelValues[bid.ext.deal_channel] || null;
-=======
                     newBid.width = bid.hasOwnProperty('w') ? bid.w : req.video.w;
                     newBid.height = bid.hasOwnProperty('h') ? bid.h : req.video.h;
                     newBid.vastXml = bid.adm;
@@ -1170,7 +1033,6 @@ export const spec = {
               }
               if (bid.ext && bid.ext.deal_channel) {
                 newBid['dealChannel'] = dealChannelValues[bid.ext.deal_channel] || null;
->>>>>>> Support for Native in Pubmatic Adapter (#3408)
               }
 
               bidResponses.push(newBid);
@@ -1214,22 +1076,11 @@ export const spec = {
    * @param {Boolean} isOpenRtb boolean to check openrtb2 protocol
    * @return {Object} params bid params
    */
-<<<<<<< HEAD
-  transformBidParams: function(params, isOpenRtb) {
-    return utils.convertTypes(
-      {
-        publisherId: 'string',
-        adSlot: 'string'
-      },
-      params
-    );
-=======
   transformBidParams: function (params, isOpenRtb) {
     return utils.convertTypes({
       'publisherId': 'string',
       'adSlot': 'string'
     }, params);
->>>>>>> Support for Native in Pubmatic Adapter (#3408)
   }
 };
 

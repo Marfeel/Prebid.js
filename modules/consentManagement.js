@@ -7,7 +7,7 @@
 import * as utils from 'src/utils';
 import { config } from 'src/config';
 import events from 'src/events';
-import { gdprDataHandler } from 'src/adaptermanager';
+import { gdprDataHandler } from 'src/adapterManager';
 import includes from 'core-js/library/fn/array/includes';
 import strIncludes from 'core-js/library/fn/string/includes';
 import { EVENTS } from 'src/constants';

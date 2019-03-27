@@ -2,6 +2,7 @@
     "33acrossBidAdapter",
     "appnexusBidAdapter",
     "appnexusClientBidAdapter",
+    "eplanningBidAdapter",
     "rubiconBidAdapter",
     "rabiconBidAdapter",
     "ixBidAdapter",

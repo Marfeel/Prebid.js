@@ -18,7 +18,11 @@ export const ajax = ajaxBuilder();
 
 export function ajaxBuilder(timeout = 3000, {request, done} = {}) {
   return function(url, callback, data, options = {}) {
-    url = (url.includes('https:')) ? url : 'https:' + url;
+    let isSecureWeb = true;
+    if (utils.getTopWindowLocation().protocol.indexOf('https') !== 0) {
+      isSecureWeb = false;
+    }
+    url = (url.includes('https:') || url.includes('http:')) ? url : (isSecureWeb) ? 'https:' + url : 'http:' + url;
     try {
       let x;
       let method = options.method || (data ? 'POST' : 'GET');

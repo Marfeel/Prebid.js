@@ -249,18 +249,19 @@ function _getDigiTrustQueryParams() {
   };
 }
 
-function _appendSiteAppDevice(request) {
+function _appendSiteAppDevice(request, referrer = utils.getTopWindowUrl()) {
   if (!request) return;
 
   // ORTB specifies app OR site
   if (typeof config.getConfig('app') === 'object') {
     request.app = config.getConfig('app');
-    request.app.publisher = {id: _s2sConfig.accountId}
+    request.app.publisher = { id: _s2sConfig.accountId };
   } else {
     request.site = {
       publisher: { id: _s2sConfig.accountId },
-      page: utils.getTopWindowUrl()
-    }
+      page: referrer,
+      domain: referrer.split('/')[2] || ''
+    };
   }
   if (typeof config.getConfig('device') === 'object') {
     request.device = config.getConfig('device');
@@ -275,7 +276,6 @@ function _appendSiteAppDevice(request) {
     request.device.h = window.innerHeight;
   }
 }
-
 function transformHeightWidth(adUnit) {
   let sizesObj = [];
   let sizes = utils.parseSizesInput(adUnit.sizes);
@@ -436,10 +436,14 @@ const OPEN_RTB_PROTOCOL = {
   buildRequest(s2sBidRequest, bidRequests, adUnits) {
     let imps = [];
     let aliases = {};
+    let referrer;
 
     // transform ad unit into array of OpenRTB impression objects
     adUnits.forEach(adUnit => {
       adUnit.bids.forEach(bid => {
+        if ((bid.params || {}).referrer) {
+          referrer = bid.params.referrer;
+        }
         // OpenRTB response contains the adunit code and bidder name. These are
         // combined to create a unique key for each bid since an id isn't returned
         bidIdMap[`${adUnit.code}${bid.bidder}`] = bid.bid_id;
@@ -514,12 +518,16 @@ const OPEN_RTB_PROTOCOL = {
       }
     };
 
+<<<<<<< HEAD
     // s2sConfig video.ext.prebid is passed through openrtb to PBS
     if (_s2sConfig.extPrebid && typeof _s2sConfig.extPrebid === 'object') {
       request.ext.prebid = Object.assign(request.ext.prebid, _s2sConfig.extPrebid);
     }
 
     _appendSiteAppDevice(request);
+=======
+    _appendSiteAppDevice(request, referrer);
+>>>>>>> wwprebid
 
     const digiTrust = _getDigiTrustQueryParams();
     if (digiTrust) {

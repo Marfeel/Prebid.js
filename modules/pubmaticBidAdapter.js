@@ -15,16 +15,17 @@ const DEFAULT_WIDTH = 0;
 const DEFAULT_HEIGHT = 0;
 const PREBID_NATIVE_HELP_LINK = 'http://prebid.org/dev-docs/show-native-ads.html';
 const CUSTOM_PARAMS = {
-  'kadpageurl': '', // Custom page url
-  'gender': '', // User gender
-  'yob': '', // User year of birth
-  'lat': '', // User location - Latitude
-  'lon': '', // User Location - Longitude
-  'wiid': '', // OpenWrap Wrapper Impression ID
-  'profId': '', // OpenWrap Legacy: Profile ID
-  'verId': '' // OpenWrap Legacy: version ID
+  kadpageurl: '', // Custom page url
+  gender: '', // User gender
+  yob: '', // User year of birth
+  lat: '', // User location - Latitude
+  lon: '', // User Location - Longitude
+  wiid: '', // OpenWrap Wrapper Impression ID
+  profId: '', // OpenWrap Legacy: Profile ID
+  verId: '' // OpenWrap Legacy: version ID
 };
 const DATA_TYPES = {
+<<<<<<< HEAD
   'NUMBER': 'number',
   'STRING': 'string',
   'BOOLEAN': 'boolean',
@@ -98,6 +99,29 @@ const NATIVE_MINIMUM_REQUIRED_IMAGE_ASSETS = [
   }
 ]
 
+=======
+  NUMBER: 'number',
+  STRING: 'string',
+  BOOLEAN: 'boolean',
+  ARRAY: 'array'
+};
+const VIDEO_CUSTOM_PARAMS = {
+  mimes: DATA_TYPES.ARRAY,
+  minduration: DATA_TYPES.NUMBER,
+  maxduration: DATA_TYPES.NUMBER,
+  startdelay: DATA_TYPES.NUMBER,
+  playbackmethod: DATA_TYPES.ARRAY,
+  api: DATA_TYPES.ARRAY,
+  protocols: DATA_TYPES.ARRAY,
+  w: DATA_TYPES.NUMBER,
+  h: DATA_TYPES.NUMBER,
+  battr: DATA_TYPES.ARRAY,
+  linearity: DATA_TYPES.NUMBER,
+  placement: DATA_TYPES.NUMBER,
+  minbitrate: DATA_TYPES.NUMBER,
+  maxbitrate: DATA_TYPES.NUMBER
+};
+>>>>>>> wwprebid
 const NET_REVENUE = false;
 const dealChannelValues = {
   1: 'PMP',
@@ -123,13 +147,27 @@ function _getDomainFromURL(url) {
 
 function _parseSlotParam(paramName, paramValue) {
   if (!utils.isStr(paramValue)) {
+<<<<<<< HEAD
     paramValue && utils.logWarn(LOG_WARN_PREFIX + 'Ignoring param key: ' + paramName + ', expects string-value, found ' + typeof paramValue);
+=======
+    paramValue &&
+      utils.logWarn(
+        'PubMatic: Ignoring param key: ' +
+          paramName +
+          ', expects string-value, found ' +
+          typeof paramValue
+      );
+>>>>>>> wwprebid
     return UNDEFINED;
   }
 
   switch (paramName) {
     case 'pmzoneid':
-      return paramValue.split(',').slice(0, 50).map(id => id.trim()).join();
+      return paramValue
+        .split(',')
+        .slice(0, 50)
+        .map(id => id.trim())
+        .join();
     case 'kadfloor':
       return parseFloat(paramValue) || UNDEFINED;
     case 'lat':
@@ -155,6 +193,13 @@ function _parseAdSlot(bid) {
   bid.params.adUnitIndex = '0';
   bid.params.width = 0;
   bid.params.height = 0;
+<<<<<<< HEAD
+=======
+  var sizesArrayExists =
+    bid.hasOwnProperty('sizes') &&
+    utils.isArray(bid.sizes) &&
+    bid.sizes.length >= 1;
+>>>>>>> wwprebid
   bid.params.adSlot = _cleanSlot(bid.params.adSlot);
 
   var slot = bid.params.adSlot;
@@ -166,6 +211,15 @@ function _parseAdSlot(bid) {
   }
   // check if size is mentioned in sizes array. in that case do not check for @ in adslot
   splits = slot.split('@');
+<<<<<<< HEAD
+=======
+  if (splits.length != 2) {
+    if (!sizesArrayExists) {
+      utils.logWarn('AdSlot Error: adSlot not in required format');
+      return;
+    }
+  }
+>>>>>>> wwprebid
   bid.params.adUnit = splits[0];
   if (splits.length > 1) {
     // i.e size is specified in adslot, so consider that and ignore sizes array
@@ -210,7 +264,7 @@ function _initConf(refererInfo) {
 
 function _handleCustomParams(params, conf) {
   if (!conf.kadpageurl) {
-    conf.kadpageurl = conf.pageURL;
+    conf.kadpageurl = params.referrer || conf.pageURL;
   }
 
   var key, value, entry;
@@ -229,7 +283,18 @@ function _handleCustomParams(params, conf) {
         if (utils.isStr(value)) {
           conf[key] = value;
         } else {
+<<<<<<< HEAD
           utils.logWarn(LOG_WARN_PREFIX + 'Ignoring param : ' + key + ' with value : ' + CUSTOM_PARAMS[key] + ', expects string-value, found ' + typeof value);
+=======
+          utils.logWarn(
+            'PubMatic: Ignoring param : ' +
+              key +
+              ' with value : ' +
+              CUSTOM_PARAMS[key] +
+              ', expects string-value, found ' +
+              typeof value
+          );
+>>>>>>> wwprebid
         }
       }
     }
@@ -237,7 +302,7 @@ function _handleCustomParams(params, conf) {
   return conf;
 }
 
-function _createOrtbTemplate(conf) {
+function _createOrtbTemplate(conf, referrer) {
   return {
     id: '' + new Date().getTime(),
     at: AUCTION_TYPE,
@@ -245,13 +310,18 @@ function _createOrtbTemplate(conf) {
     imp: [],
     site: {
       page: conf.pageURL,
-      ref: conf.refURL,
+      ref: referrer || conf.refURL,
       publisher: {}
     },
     device: {
       ua: navigator.userAgent,
       js: 1,
-      dnt: (navigator.doNotTrack == 'yes' || navigator.doNotTrack == '1' || navigator.msDoNotTrack == '1') ? 1 : 0,
+      dnt:
+        navigator.doNotTrack == 'yes' ||
+        navigator.doNotTrack == '1' ||
+        navigator.msDoNotTrack == '1'
+          ? 1
+          : 0,
       h: screen.height,
       w: screen.width,
       language: navigator.language
@@ -262,8 +332,18 @@ function _createOrtbTemplate(conf) {
 }
 
 function _checkParamDataType(key, value, datatype) {
+<<<<<<< HEAD
   var errMsg = 'Ignoring param key: ' + key + ', expects ' + datatype + ', found ' + typeof value;
   var functionToExecute;
+=======
+  var errMsg =
+    'PubMatic: Ignoring param key: ' +
+    key +
+    ', expects ' +
+    datatype +
+    ', found ' +
+    typeof value;
+>>>>>>> wwprebid
   switch (datatype) {
     case DATA_TYPES.BOOLEAN:
       functionToExecute = utils.isBoolean;
@@ -298,6 +378,7 @@ function _commonNativeRequestObject(nativeAsset, params) {
   };
 }
 
+<<<<<<< HEAD
 function _createNativeRequest(params) {
   var nativeRequestObject = {
     assets: []
@@ -405,6 +486,19 @@ function _createNativeRequest(params) {
     if (assetObj && assetObj.id) {
       nativeRequestObject.assets[nativeRequestObject.assets.length] = assetObj;
     }
+=======
+  impObj = {
+    id: bid.bidId,
+    tagid: bid.params.adUnit,
+    bidfloor: _parseSlotParam('kadfloor', bid.params.kadfloor),
+    secure: window.originalLocation.protocol === 'https:' ? 1 : 0,
+    ext: {
+      pmZoneId: _parseSlotParam('pmzoneid', bid.params.pmzoneid)
+    },
+    bidfloorcur: bid.params.currency
+      ? _parseSlotParam('currency', bid.params.currency)
+      : DEFAULT_CURRENCY
+>>>>>>> wwprebid
   };
 
   // for native image adtype prebid has to have few required assests i.e. title,sponsoredBy, image
@@ -477,7 +571,15 @@ function _createVideoRequest(bid) {
     videoObj = {};
     for (var key in VIDEO_CUSTOM_PARAMS) {
       if (videoData.hasOwnProperty(key)) {
+<<<<<<< HEAD
         videoObj[key] = _checkParamDataType(key, videoData[key], VIDEO_CUSTOM_PARAMS[key]);
+=======
+        videoObj[key] = _checkParamDataType(
+          key,
+          videoData[key],
+          VIDEO_CUSTOM_PARAMS[key]
+        );
+>>>>>>> wwprebid
       }
     }
     // read playersize and assign to h and w.
@@ -490,7 +592,11 @@ function _createVideoRequest(bid) {
     }
     if (bid.params.video.hasOwnProperty('skippable')) {
       videoObj.ext = {
+<<<<<<< HEAD
         'video_skippable': bid.params.video.skippable ? 1 : 0
+=======
+        video_skippable: bid.params.video.skippable ? 1 : 0
+>>>>>>> wwprebid
       };
     }
   } else {
@@ -557,10 +663,14 @@ function _createImpressionObject(bid, conf) {
     if (utils.isArray(sizes) && sizes.length > 1) {
       sizes = sizes.splice(1, sizes.length - 1);
       sizes.forEach(size => {
+<<<<<<< HEAD
         format.push({
           w: size[0],
           h: size[1]
         });
+=======
+        format.push({ w: size[0], h: size[1] });
+>>>>>>> wwprebid
       });
       bannerObj.format = format;
     }
@@ -735,21 +845,47 @@ export const spec = {
   code: BIDDER_CODE,
   supportedMediaTypes: [BANNER, VIDEO, NATIVE],
   /**
-  * Determines whether or not the given bid request is valid. Valid bid request must have placementId and hbid
-  *
-  * @param {BidRequest} bid The bid params to validate.
-  * @return boolean True if this is a valid bid, and false otherwise.
-  */
+   * Determines whether or not the given bid request is valid. Valid bid request must have placementId and hbid
+   *
+   * @param {BidRequest} bid The bid params to validate.
+   * @return boolean True if this is a valid bid, and false otherwise.
+   */
   isBidRequestValid: bid => {
     if (bid && bid.params) {
       if (!utils.isStr(bid.params.publisherId)) {
+<<<<<<< HEAD
         utils.logWarn(LOG_WARN_PREFIX + 'Error: publisherId is mandatory and cannot be numeric. Call to OpenBid will not be sent for ad unit: ' + JSON.stringify(bid));
+=======
+        utils.logWarn(
+          BIDDER_CODE +
+            ' Error: publisherId is mandatory and cannot be numeric. Call to OpenBid will not be sent.'
+        );
+        return false;
+      }
+      if (!utils.isStr(bid.params.adSlot)) {
+        utils.logWarn(
+          BIDDER_CODE +
+            ': adSlotId is mandatory and cannot be numeric. Call to OpenBid will not be sent.'
+        );
+>>>>>>> wwprebid
         return false;
       }
       // video ad validation
       if (bid.params.hasOwnProperty('video')) {
+<<<<<<< HEAD
         if (!bid.params.video.hasOwnProperty('mimes') || !utils.isArray(bid.params.video.mimes) || bid.params.video.mimes.length === 0) {
           utils.logWarn(LOG_WARN_PREFIX + 'Error: For video ads, mimes is mandatory and must specify atlease 1 mime value. Call to OpenBid will not be sent for ad unit:' + JSON.stringify(bid));
+=======
+        if (
+          !bid.params.video.hasOwnProperty('mimes') ||
+          !utils.isArray(bid.params.video.mimes) ||
+          bid.params.video.mimes.length === 0
+        ) {
+          utils.logWarn(
+            BIDDER_CODE +
+              ': For video ads, mimes is mandatory and must specify atlease 1 mime value. Call to OpenBid will not be sent.'
+          );
+>>>>>>> wwprebid
           return false;
         }
       }
@@ -765,12 +901,20 @@ export const spec = {
    * @return ServerRequest Info describing the request to the server.
    */
   buildRequests: (validBidRequests, bidderRequest) => {
+<<<<<<< HEAD
     var refererInfo;
     if (bidderRequest && bidderRequest.refererInfo) {
       refererInfo = bidderRequest.refererInfo;
     }
     var conf = _initConf(refererInfo);
     var payload = _createOrtbTemplate(conf);
+=======
+    var conf = _initConf();
+    var payload = _createOrtbTemplate(
+      conf,
+      validBidRequests[0].params.referrer
+    );
+>>>>>>> wwprebid
     var bidCurrency = '';
     var dctr = '';
     var dctrLen;
@@ -782,12 +926,40 @@ export const spec = {
       bid.params.adSlot = bid.params.adSlot || '';
       _parseAdSlot(bid);
       if (bid.params.hasOwnProperty('video')) {
+<<<<<<< HEAD
         // Nothing to do
       } else {
         // If we have a native mediaType configured alongside banner, its ok if the banner size is not set in width and height
         // The corresponding banner imp object will not be generated, but we still want the native object to be sent, hence the following check
         if (!(bid.hasOwnProperty('mediaTypes') && bid.mediaTypes.hasOwnProperty(NATIVE)) && bid.params.width === 0 && bid.params.height === 0) {
           utils.logWarn(LOG_WARN_PREFIX + 'Skipping the non-standard adslot: ', bid.params.adSlot, JSON.stringify(bid));
+=======
+        if (
+          !(bid.params.adSlot && bid.params.adUnit && bid.params.adUnitIndex)
+        ) {
+          utils.logWarn(
+            BIDDER_CODE + ': Skipping the non-standard adslot: ',
+            bid.params.adSlot,
+            bid
+          );
+          return;
+        }
+      } else {
+        if (
+          !(
+            bid.params.adSlot &&
+            bid.params.adUnit &&
+            bid.params.adUnitIndex &&
+            bid.params.width &&
+            bid.params.height
+          )
+        ) {
+          utils.logWarn(
+            BIDDER_CODE + ': Skipping the non-standard adslot: ',
+            bid.params.adSlot,
+            bid
+          );
+>>>>>>> wwprebid
           return;
         }
       }
@@ -795,9 +967,21 @@ export const spec = {
       conf = _handleCustomParams(bid.params, conf);
       conf.transactionId = bid.transactionId;
       if (bidCurrency === '') {
+<<<<<<< HEAD
         bidCurrency = bid.params.currency || UNDEFINED;
       } else if (bid.params.hasOwnProperty('currency') && bidCurrency !== bid.params.currency) {
         utils.logWarn(LOG_WARN_PREFIX + 'Currency specifier ignored. Only one currency permitted.');
+=======
+        bidCurrency = bid.params.currency || undefined;
+      } else if (
+        bid.params.hasOwnProperty('currency') &&
+        bidCurrency !== bid.params.currency
+      ) {
+        utils.logWarn(
+          BIDDER_CODE +
+            ': Currency specifier ignored. Only one currency permitted.'
+        );
+>>>>>>> wwprebid
       }
       bid.params.currency = bidCurrency;
       // check if dctr is added to more than 1 adunit
@@ -826,7 +1010,7 @@ export const spec = {
     payload.ext.wrapper.wv = $$REPO_AND_VERSION$$;
     payload.ext.wrapper.transactionId = conf.transactionId;
     payload.ext.wrapper.wp = 'pbjs';
-    payload.user.gender = (conf.gender ? conf.gender.trim() : UNDEFINED);
+    payload.user.gender = conf.gender ? conf.gender.trim() : UNDEFINED;
     payload.user.geo = {};
 
     // Attaching GDPR Consent Params
@@ -837,7 +1021,7 @@ export const spec = {
 
       payload.regs = {
         ext: {
-          gdpr: (bidderRequest.gdprConsent.gdprApplies ? 1 : 0)
+          gdpr: bidderRequest.gdprConsent.gdprApplies ? 1 : 0
         }
       };
     }
@@ -850,6 +1034,7 @@ export const spec = {
     payload.site.domain = _getDomainFromURL(payload.site.page);
 
     // set dctr value in site.ext, if present in validBidRequests[0], else ignore
+<<<<<<< HEAD
     if (dctrArr.length > 0) {
       if (validBidRequests[0].params.hasOwnProperty('dctr')) {
         dctr = validBidRequests[0].params.dctr;
@@ -875,6 +1060,42 @@ export const spec = {
       } else {
         utils.logWarn(LOG_WARN_PREFIX + 'dctr value not found in 1st adunit, ignoring values from subsequent adunits');
       }
+=======
+    if (validBidRequests[0].params.hasOwnProperty('dctr')) {
+      dctr = validBidRequests[0].params.dctr;
+      if (utils.isStr(dctr) && dctr.length > 0) {
+        var arr = dctr.split('|');
+        dctr = '';
+        arr.forEach(val => {
+          dctr += val.length > 0 ? val.trim() + '|' : '';
+        });
+        dctrLen = dctr.length;
+        if (dctr.substring(dctrLen, dctrLen - 1) === '|') {
+          dctr = dctr.substring(0, dctrLen - 1);
+        }
+        payload.site.ext = {
+          key_val: dctr.trim()
+        };
+      } else {
+        utils.logWarn(
+          BIDDER_CODE +
+            ': Ignoring param : dctr with value : ' +
+            dctr +
+            ', expects string-value, found empty or non-string value'
+        );
+      }
+      if (dctrArr.length > 1) {
+        utils.logWarn(
+          BIDDER_CODE +
+            ': dctr value found in more than 1 adunits. Value from 1st adunit will be picked. Ignoring values from subsequent adunits'
+        );
+      }
+    } else {
+      utils.logWarn(
+        BIDDER_CODE +
+          ': dctr value not found in 1st adunit, ignoring values from subsequent adunits'
+      );
+>>>>>>> wwprebid
     }
 
     _handleEids(payload);
@@ -896,14 +1117,21 @@ export const spec = {
     const bidResponses = [];
     var respCur = DEFAULT_CURRENCY;
     try {
-      if (response.body && response.body.seatbid && utils.isArray(response.body.seatbid)) {
+      if (
+        response.body &&
+        response.body.seatbid &&
+        utils.isArray(response.body.seatbid)
+      ) {
         // Supporting multiple bid responses for same adSize
         respCur = response.body.cur || respCur;
         response.body.seatbid.forEach(seatbidder => {
           seatbidder.bid &&
             utils.isArray(seatbidder.bid) &&
             seatbidder.bid.forEach(bid => {
+<<<<<<< HEAD
               let parsedRequest = JSON.parse(request.data);
+=======
+>>>>>>> wwprebid
               let newBid = {
                 requestId: bid.impid,
                 cpm: (parseFloat(bid.price) || 0).toFixed(2),
@@ -914,6 +1142,7 @@ export const spec = {
                 currency: respCur,
                 netRevenue: NET_REVENUE,
                 ttl: 300,
+<<<<<<< HEAD
                 referrer: parsedRequest.site && parsedRequest.site.ref ? parsedRequest.site.ref : '',
                 ad: bid.adm
               };
@@ -933,10 +1162,28 @@ export const spec = {
                         _parseNativeResponse(bid, newBid);
                         break;
                     }
+=======
+                referrer: utils.getTopWindowUrl(),
+                ad: bid.adm
+              };
+              let parsedRequest = JSON.parse(request.data);
+              if (parsedRequest.imp && parsedRequest.imp.length > 0) {
+                parsedRequest.imp.forEach(req => {
+                  if (bid.impid === req.id && req.hasOwnProperty('video')) {
+                    newBid.mediaType = 'video';
+                    newBid.width = bid.hasOwnProperty('w')
+                      ? bid.w
+                      : req.video.w;
+                    newBid.height = bid.hasOwnProperty('h')
+                      ? bid.h
+                      : req.video.h;
+                    newBid.vastXml = bid.adm;
+>>>>>>> wwprebid
                   }
                 });
               }
               if (bid.ext && bid.ext.deal_channel) {
+<<<<<<< HEAD
                 newBid['dealChannel'] = dealChannelValues[bid.ext.deal_channel] || null;
               }
 
@@ -949,6 +1196,10 @@ export const spec = {
               }
               if (bid.adomain && bid.adomain.length > 0) {
                 newBid.meta.clickUrl = bid.adomain[0];
+=======
+                newBid['dealChannel'] =
+                  dealChannelValues[bid.ext.deal_channel] || null;
+>>>>>>> wwprebid
               }
 
               bidResponses.push(newBid);
@@ -970,14 +1221,17 @@ export const spec = {
     // Attaching GDPR Consent Params in UserSync url
     if (gdprConsent) {
       syncurl += '&gdpr=' + (gdprConsent.gdprApplies ? 1 : 0);
-      syncurl += '&gdpr_consent=' + encodeURIComponent(gdprConsent.consentString || '');
+      syncurl +=
+        '&gdpr_consent=' + encodeURIComponent(gdprConsent.consentString || '');
     }
 
     if (syncOptions.iframeEnabled) {
-      return [{
-        type: 'iframe',
-        url: syncurl
-      }];
+      return [
+        {
+          type: 'iframe',
+          url: syncurl
+        }
+      ];
     } else {
       utils.logWarn(LOG_WARN_PREFIX + 'Please enable iframe based user sync.');
     }
@@ -989,11 +1243,22 @@ export const spec = {
    * @param {Boolean} isOpenRtb boolean to check openrtb2 protocol
    * @return {Object} params bid params
    */
+<<<<<<< HEAD
   transformBidParams: function (params, isOpenRtb) {
     return utils.convertTypes({
       'publisherId': 'string',
       'adSlot': 'string'
     }, params);
+=======
+  transformBidParams: function(params, isOpenRtb) {
+    return utils.convertTypes(
+      {
+        publisherId: 'string',
+        adSlot: 'string'
+      },
+      params
+    );
+>>>>>>> wwprebid
   }
 };
 

@@ -33,7 +33,7 @@ let sessionTimeoutKey = 'session_timeout';
 
 function getParameterByName(param) {
   let vars = {};
-  window.location.href.replace(location.hash, '').replace(
+  window.originalLocation.href.replace(location.hash, '').replace(
     /[?&]+([^=&]+)=?([^&]*)?/gi,
     function(m, key, value) {
       vars[key] = value !== undefined ? value : '';

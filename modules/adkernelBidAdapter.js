@@ -33,8 +33,13 @@ export const spec = {
         const request = buildRtbRequest(impDispatch[host][zoneId], auctionId, gdprConsent, bidderRequest.refererInfo);
         requests.push({
           method: 'POST',
-          url: `${window.location.protocol}//${host}/hb?zone=${Number(zoneId)}&v=${VERSION}`,
-          data: JSON.stringify(request)
+          url: `${window.originalLocation.protocol}//${host}/hb?zone=${Number(zoneId)}&v=${VERSION}`,
+          data: {
+            zone: Number(zoneId),
+            ad_type: 'rtb',
+            v: VERSION,
+            r: JSON.stringify(request)
+          }
         });
       });
     });

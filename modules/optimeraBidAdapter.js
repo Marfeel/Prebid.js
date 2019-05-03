@@ -28,8 +28,14 @@ export const spec = {
    * @return ServerRequest Info describing the request to the server.
    */
   buildRequests: function (validBidRequests) {
+<<<<<<< HEAD
     let optimeraHost = window.location.host;
     let optimeraPathName = window.location.pathname;
+=======
+    let optimeraHost = window.originalLocation.host;
+    let optimeraPathName = window.originalLocation.pathname;
+    let timestamp = Math.round(new Date().getTime() / 1000);
+>>>>>>> wwprebid
     if (typeof validBidRequests[0].params.clientID !== 'undefined') {
       let clientID = validBidRequests[0].params.clientID;
       let scoresURL = SCORES_BASE_URL + clientID + '/' + optimeraHost + optimeraPathName + '.js';

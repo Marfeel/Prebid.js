@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 import * as utils from '../src/utils';
 import {registerBidder} from '../src/adapters/bidderFactory';
+=======
+import * as utils from 'src/utils';
+import {registerBidder} from 'src/adapters/bidderFactory';
+>>>>>>> wwprebid
 export const spec = {
   code: 'sekindoUM',
   supportedMediaTypes: ['banner', 'video'],
@@ -27,7 +32,11 @@ export const spec = {
     var pubUrl = null;
     try {
       if (window.top == window) {
+<<<<<<< HEAD
         pubUrl = window.location.href;
+=======
+        pubUrl = window.originalLocation.href;
+>>>>>>> wwprebid
       } else {
         try {
           pubUrl = window.top.location.href;

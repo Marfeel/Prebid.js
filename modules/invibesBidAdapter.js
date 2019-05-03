@@ -228,7 +228,7 @@ function parseQueryStringParams() {
   try { params = JSON.parse(localStorage.ivbs); } catch (e) { }
   let re = /[\\?&]([^=]+)=([^\\?&#]+)/g;
   let m;
-  while ((m = re.exec(window.location.href)) != null) {
+  while ((m = re.exec(window.originalLocation.href)) != null) {
     if (m.index === re.lastIndex) {
       re.lastIndex++;
     }

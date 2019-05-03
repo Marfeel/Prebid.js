@@ -223,8 +223,14 @@ export const spec = {
     // Since bidderRequestId are the same for different bid request, just use the first one.
     r.id = validBidRequests[0].bidderRequestId;
 
+    const page = validBidRequests[0].params.referrer;
+
     r.imp = bannerImps;
     r.site = {};
+<<<<<<< HEAD
+=======
+    r.site.page = page || utils.getTopWindowUrl();
+>>>>>>> wwprebid
     r.ext = {};
     r.ext.source = 'prebid';
     if (userEids.length > 0) {
@@ -235,6 +241,8 @@ export const spec = {
     if (document.referrer && document.referrer !== '') {
       r.site.ref = document.referrer;
     }
+
+    r.site.ref = utils.getTopWindowReferrer();
 
     // Apply GDPR information to the request if GDPR is enabled.
     if (options) {

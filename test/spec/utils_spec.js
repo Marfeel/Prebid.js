@@ -731,7 +731,7 @@ describe('Utils', function () {
       sandbox.restore();
     });
 
-    it('returns window.location if not in iFrame', function () {
+    it('returns window.originalLocation if not in iFrame', function () {
       sandbox.stub(utils.internal, 'getWindowLocation').returns({
         href: 'https://www.google.com/',
         ancestorOrigins: {},

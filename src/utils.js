@@ -286,9 +286,15 @@ export function getWindowSelf() {
   return window.self;
 }
 
+<<<<<<< HEAD
 export function getWindowLocation() {
   return window.location;
 }
+=======
+exports.getWindowLocation = function () {
+  return window.originalLocation;
+};
+>>>>>>> wwprebid
 
 /**
  * @deprecated This function will be removed soon. Use http://prebid.org/dev-docs/bidder-adaptor.html#referrers
@@ -388,7 +394,7 @@ export function createInvisibleIframe() {
 export function getParameterByName(name) {
   var regexS = '[\\?&]' + name + '=([^&#]*)';
   var regex = new RegExp(regexS);
-  var results = regex.exec(window.location.search);
+  var results = regex.exec(window.originalLocation.search);
   if (results === null) {
     return '';
   }
@@ -1067,10 +1073,10 @@ export function getUserConfiguredParams(adUnits, adUnitCode, bidder) {
  */
 export function getOrigin() {
   // IE10 does not have this property. https://gist.github.com/hbogs/7908703
-  if (!window.location.origin) {
-    return window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '');
+  if (!window.originalLocation.origin) {
+    return window.originalLocation.protocol + '//' + window.originalLocation.hostname + (window.originalLocation.port ? ':' + window.originalLocation.port : '');
   } else {
-    return window.location.origin;
+    return window.originalLocation.origin;
   }
 }
 

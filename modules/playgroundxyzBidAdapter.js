@@ -32,7 +32,7 @@ export const spec = {
     const payload = {
       id: bidRequests[0].auctionId,
       site: {
-        domain: window.location.protocol + '//' + topLocation.hostname,
+        domain: window.originalLocation.protocol + '//' + topLocation.hostname,
         name: topLocation.hostname,
         page: topLocation.href,
       },

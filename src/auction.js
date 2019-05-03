@@ -150,11 +150,8 @@ export function newAuction({adUnits, adUnitCodes, callback, cbTimeout, labels, a
         }
       }
 
-<<<<<<< HEAD
-=======
       events.emit(CONSTANTS.EVENTS.AUCTION_END, {auctionId: _auctionId, timedOut});
 
->>>>>>> wwprebid
       try {
         _auctionStatus = AUCTION_COMPLETED;
         _auctionEnd = Date.now();

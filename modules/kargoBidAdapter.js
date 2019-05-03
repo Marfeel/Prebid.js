@@ -177,14 +177,9 @@ export const spec = {
     return {
       userIDs: spec._getUserIds(),
       krux: spec._getKrux(),
-<<<<<<< HEAD
-      pageURL: window.location.href,
+      pageURL: window.originalLocation.href,
       rawCRB: spec._readCookie('krg_crb'),
       rawCRBLocalStorage: spec._getLocalStorageSafely('krg_crb')
-=======
-      pageURL: window.originalLocation.href,
-      rawCRB: spec._readCookie('krg_crb')
->>>>>>> wwprebid
     };
   },
 

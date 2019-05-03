@@ -18,12 +18,9 @@ const {
     BIDDER_DONE,
     SET_TARGETING,
     AD_RENDER_FAILED,
-<<<<<<< HEAD
-    ADD_AD_UNITS
-=======
+    ADD_AD_UNITS,
     CMP_UPDATE,
     ERROR_SECURE_CREATIVE
->>>>>>> wwprebid
   }
 } = CONSTANTS;
 

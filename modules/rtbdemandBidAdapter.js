@@ -1,10 +1,5 @@
-<<<<<<< HEAD
-import * as utils from '../src/utils';
-import {registerBidder} from '../src/adapters/bidderFactory';
-=======
 import * as utils from 'src/utils';
 import {registerBidder} from 'src/adapters/bidderFactory';
->>>>>>> wwprebid
 
 const BIDDER_CODE = 'rtbdemand';
 const BIDDER_SERVER = 'bidding.rtbdemand.com';

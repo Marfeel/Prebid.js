@@ -518,16 +518,12 @@ const OPEN_RTB_PROTOCOL = {
       }
     };
 
-<<<<<<< HEAD
     // s2sConfig video.ext.prebid is passed through openrtb to PBS
     if (_s2sConfig.extPrebid && typeof _s2sConfig.extPrebid === 'object') {
       request.ext.prebid = Object.assign(request.ext.prebid, _s2sConfig.extPrebid);
     }
 
-    _appendSiteAppDevice(request);
-=======
     _appendSiteAppDevice(request, referrer);
->>>>>>> wwprebid
 
     const digiTrust = _getDigiTrustQueryParams();
     if (digiTrust) {

@@ -227,10 +227,7 @@ export const spec = {
 
     r.imp = bannerImps;
     r.site = {};
-<<<<<<< HEAD
-=======
     r.site.page = page || utils.getTopWindowUrl();
->>>>>>> wwprebid
     r.ext = {};
     r.ext.source = 'prebid';
     if (userEids.length > 0) {

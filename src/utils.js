@@ -286,15 +286,9 @@ export function getWindowSelf() {
   return window.self;
 }
 
-<<<<<<< HEAD
 export function getWindowLocation() {
-  return window.location;
-}
-=======
-exports.getWindowLocation = function () {
   return window.originalLocation;
-};
->>>>>>> wwprebid
+}
 
 /**
  * @deprecated This function will be removed soon. Use http://prebid.org/dev-docs/bidder-adaptor.html#referrers

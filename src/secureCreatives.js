@@ -68,7 +68,7 @@ function receiveMessage(ev) {
 }
 
 function sendAdToCreative(adObject, remoteDomain, source) {
-  const { adId, ad, adUrl, width, height } = adObject;
+  const { adId, ad, adUrl, width, height, cpm } = adObject;
 
   if (adId) {
     source.postMessage(JSON.stringify({

@@ -4,13 +4,13 @@
  * and make it available for any GDPR supported adapters to read/pass this information to
  * their system.
  */
-import * as utils from 'src/utils';
-import { config } from 'src/config';
-import events from 'src/events';
-import { gdprDataHandler } from 'src/adaptermanager';
+import * as utils from '../src/utils';
+import { config } from '../src/config';
+import events from '../src/events';
+import { gdprDataHandler } from '../src/adapterManager';
 import includes from 'core-js/library/fn/array/includes';
 import strIncludes from 'core-js/library/fn/string/includes';
-import { EVENTS } from 'src/constants';
+import { EVENTS } from '../src/constants';
 
 const DEFAULT_CMP = 'iab';
 const DEFAULT_CONSENT_TIMEOUT = 10000;

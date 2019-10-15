@@ -215,6 +215,9 @@ export function newTargeting(auctionManager) {
 
   let totalBids = [];
 
+  /**
+   * bid caching done with all bids specifically for Marfeel purposes due to its own configuration
+   */
   function getBidsReceived() {
     let bidsReceived = auctionManager.getBidsReceived();
     let bidsToProcess;

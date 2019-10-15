@@ -213,21 +213,28 @@ export function newTargeting(auctionManager) {
     return auctionManager.getAdUnitCodes() || [];
   }
 
+  let totalBids = [];
+
   function getBidsReceived() {
     let bidsReceived = auctionManager.getBidsReceived();
+    let bidsToProcess;
 
     if (!config.getConfig('useBidCache')) {
-      bidsReceived = bidsReceived.filter(bid => latestAuctionForAdUnit[bid.adUnitCode] === bid.auctionId)
+      bidsReceived = bidsReceived.filter(bid => latestAuctionForAdUnit[bid.adUnitCode] === bid.auctionId);
+      bidsToProcess = bidsReceived;
+    } else {
+      totalBids = [...totalBids, ...bidsReceived];
+      bidsToProcess = totalBids;
     }
 
-    bidsReceived = bidsReceived
+    bidsToProcess = bidsToProcess
       .filter(bid => deepAccess(bid, 'video.context') !== ADPOD)
       .filter(bid => bid.mediaType !== 'banner' || sizeSupported([bid.width, bid.height]))
       .filter(filters.isUnusedBid)
       .filter(filters.isBidNotExpired)
     ;
 
-    return getHighestCpmBidsFromBidPool(bidsReceived, getOldestHighestCpmBid);
+    return getHighestCpmBidsFromBidPool(bidsToProcess, getOldestHighestCpmBid);
   }
 
   /**

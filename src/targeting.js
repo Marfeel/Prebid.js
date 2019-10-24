@@ -5,6 +5,7 @@ import { auctionManager } from './auctionManager';
 import { sizeSupported } from './sizeMapping';
 import { ADPOD } from './mediaTypes';
 import includes from 'core-js/library/fn/array/includes';
+import { getLastLocation } from './marfeelTools';
 
 const utils = require('./utils.js');
 var CONSTANTS = require('./constants.json');
@@ -213,7 +214,7 @@ export function newTargeting(auctionManager) {
     return auctionManager.getAdUnitCodes() || [];
   }
 
-  let totalBids = [];
+  const bidsByReferrer = {};
 
   /**
    * bid caching done with all bids specifically for Marfeel purposes due to its own configuration
@@ -226,8 +227,12 @@ export function newTargeting(auctionManager) {
       bidsReceived = bidsReceived.filter(bid => latestAuctionForAdUnit[bid.adUnitCode] === bid.auctionId);
       bidsToProcess = bidsReceived;
     } else {
-      totalBids = [...totalBids, ...bidsReceived];
-      bidsToProcess = totalBids;
+      const lastLocation = getLastLocation();
+
+      bidsReceived.forEach(function (bidReceived) {
+        bidsByReferrer[lastLocation] = (bidsByReferrer[lastLocation]) ? [...bidsByReferrer[lastLocation], bidReceived] : [bidReceived];
+      });
+      bidsToProcess = bidsByReferrer[lastLocation];
     }
 
     bidsToProcess = bidsToProcess

@@ -219,12 +219,14 @@ export function newTargeting(auctionManager) {
   /**
    * bid caching done with all bids specifically for Marfeel purposes due to its own configuration
    */
+  const filterBidsByAdUnit = (bidsReceived) => bidsReceived.filter(bid => latestAuctionForAdUnit[bid.adUnitCode] === bid.auctionId);
+
   function getBidsReceived() {
     let bidsReceived = auctionManager.getBidsReceived();
     let bidsToProcess;
 
     if (!config.getConfig('useBidCache')) {
-      bidsReceived = bidsReceived.filter(bid => latestAuctionForAdUnit[bid.adUnitCode] === bid.auctionId);
+      bidsReceived = filterBidsByAdUnit(bidsReceived);
       bidsToProcess = bidsReceived;
     } else {
       const lastLocation = getLastLocation();
@@ -232,7 +234,8 @@ export function newTargeting(auctionManager) {
       bidsReceived.forEach(function (bidReceived) {
         bidsByReferrer[lastLocation] = (bidsByReferrer[lastLocation]) ? [...bidsByReferrer[lastLocation], bidReceived] : [bidReceived];
       });
-      bidsToProcess = bidsByReferrer[lastLocation];
+
+      bidsToProcess = bidsByReferrer[lastLocation] || filterBidsByAdUnit(bidsReceived);
     }
 
     bidsToProcess = bidsToProcess

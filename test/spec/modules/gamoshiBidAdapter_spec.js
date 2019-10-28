@@ -227,13 +227,49 @@ describe('GamoshiAdapter', function () {
 
     it('builds request with gdpr consent', function () {
       let response = spec.buildRequests([bidRequest], bidRequest)[0];
+      expect(response.data.ext.gdpr_consent).to.exist;
       expect(response.data.ext).to.have.property('gdpr_consent');
       expect(response.data.ext.gdpr_consent.consent_string).to.equal('some string');
       expect(response.data.ext.gdpr_consent.consent_required).to.equal(true);
+
+      expect(response.data.regs.ext.gdpr).to.exist;
+      expect(response.data.user.ext.consent).to.equal('some string');
+    });
+
+    it('build request with ID5 Id', function () {
+      const bidRequestClone = utils.deepClone(bidRequest);
+      bidRequestClone.userId = {};
+      bidRequestClone.userId.id5id = 'id5-user-id';
+      let request = spec.buildRequests([bidRequestClone], bidRequestClone)[0];
+      expect(request.data.user.ext.eids).to.deep.equal([{
+        'source': 'id5-sync.com',
+        'uids': [{
+          'id': 'id5-user-id',
+          'ext': {
+            'rtiPartner': 'ID5ID'
+          }
+        }]
+      }]);
+    });
+
+    it('build request with unified Id', function () {
+      const bidRequestClone = utils.deepClone(bidRequest);
+      bidRequestClone.userId = {};
+      bidRequestClone.userId.tdid = 'tdid-user-id';
+      let request = spec.buildRequests([bidRequestClone], bidRequestClone)[0];
+      expect(request.data.user.ext.eids).to.deep.equal([{
+        'source': 'adserver.org',
+        'uids': [{
+          'id': 'tdid-user-id',
+          'ext': {
+            'rtiPartner': 'TDID'
+          }
+        }]
+      }]);
     });
   });
 
-  describe('interpretResponse', function () {
+  describe('interpretResponse', () => {
     const bannerBidRequest = {
       'adUnitCode': 'adunit-code',
       'auctionId': '1d1a030790a475',
@@ -329,6 +365,8 @@ describe('GamoshiAdapter', function () {
       ]
     };
 
+    const TTL = 360;
+
     it('returns an empty array on missing response', function () {
       let response;
 
@@ -345,13 +383,12 @@ describe('GamoshiAdapter', function () {
       const response = spec.interpretResponse({body: rtbResponse}, {bidRequest: bannerBidRequest});
       expect(Array.isArray(response)).to.equal(true);
       expect(response.length).to.equal(1);
-
       const ad0 = response[0];
       expect(ad0.requestId).to.equal(bannerBidRequest.bidId);
       expect(ad0.cpm).to.equal(rtbResponse.seatbid[1].bid[0].price);
       expect(ad0.width).to.equal(rtbResponse.seatbid[1].bid[0].w);
       expect(ad0.height).to.equal(rtbResponse.seatbid[1].bid[0].h);
-      expect(ad0.ttl).to.equal(60 * 10);
+      expect(ad0.ttl).to.equal(TTL);
       expect(ad0.creativeId).to.equal(rtbResponse.seatbid[1].bid[0].crid);
       expect(ad0.netRevenue).to.equal(true);
       expect(ad0.currency).to.equal(rtbResponse.seatbid[1].bid[0].cur || rtbResponse.cur || 'USD');
@@ -364,13 +401,12 @@ describe('GamoshiAdapter', function () {
       const response = spec.interpretResponse({body: rtbResponse}, {bidRequest: videoBidRequest});
       expect(Array.isArray(response)).to.equal(true);
       expect(response.length).to.equal(1);
-
       const ad0 = response[0];
       expect(ad0.requestId).to.equal(videoBidRequest.bidId);
       expect(ad0.cpm).to.equal(rtbResponse.seatbid[0].bid[0].price);
       expect(ad0.width).to.equal(rtbResponse.seatbid[0].bid[0].w);
       expect(ad0.height).to.equal(rtbResponse.seatbid[0].bid[0].h);
-      expect(ad0.ttl).to.equal(60 * 10);
+      expect(ad0.ttl).to.equal(TTL);
       expect(ad0.creativeId).to.equal(rtbResponse.seatbid[0].bid[0].crid);
       expect(ad0.netRevenue).to.equal(true);
       expect(ad0.currency).to.equal(rtbResponse.seatbid[0].bid[0].cur || rtbResponse.cur || 'USD');

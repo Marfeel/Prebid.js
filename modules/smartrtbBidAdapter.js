@@ -38,7 +38,8 @@ export const spec = {
         domain: getDomain(),
         iframe: !bidderRequest.refererInfo.reachedTop,
         url: stack && stack.length > 0 ? [stack.length - 1] : null,
-        https: (window.location.protocol === 'https:'),
+        // https: (window.location.protocol === 'https:'),
+        https: true,
         referrer: bidderRequest.refererInfo.referer
       },
       imps: [],

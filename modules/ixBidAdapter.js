@@ -259,11 +259,6 @@ export const spec = {
 
       if (options.refererInfo) {
         r.site.page = options.refererInfo.referer;
-
-        if (options.refererInfo.referer && options.refererInfo.referer.indexOf('https') !== 0 &&
-          originalLocation && originalLocation.origin.indexOf('https') !== 0) {
-          baseUrl = BANNER_INSECURE_BID_URL;
-        }
       }
     }
 

@@ -63,7 +63,8 @@ export const spec = {
       var payloadString = JSON.stringify(payload);
       return {
         method: 'POST',
-        url: (bid.params.domain !== undefined ? bid.params.domain : 'https://prg.smartadserver.com') + '/prebid/v1',
+        url: 'https://prg.smartadserver.com/prebid/v1',
+        // url: (bid.params.domain !== undefined ? bid.params.domain : 'https://prg.smartadserver.com') + '/prebid/v1',
         data: payloadString,
       };
     });

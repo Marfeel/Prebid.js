@@ -18,14 +18,25 @@ var lastLocation;
 
 export const getLastLocation = () => lastLocation;
 
+const extractLastLocationFromArray = (adUnitArr) => (
+  adUnitArr &&
+  adUnitArr[0] &&
+  adUnitArr[0].bids &&
+  adUnitArr[0].bids[0] &&
+  adUnitArr[0].bids[0].params &&
+  adUnitArr[0].bids[0].params.referrer) ? adUnitArr[0].bids[0].params.referrer : '';
+
+const extractLastLocationFromObject = (adUnitArr) => (
+  adUnitArr &&
+  adUnitArr.bids &&
+  adUnitArr.bids[0] &&
+  adUnitArr.bids[0].params &&
+  adUnitArr.bids[0].params.referrer) ? adUnitArr.bids[0].params.referrer : '';
+
 export const setLastLocationFromLastAdUnit = (adUnitArr) => {
-  try {
-    if (utils.isArray(adUnitArr)) {
-      lastLocation = adUnitArr[0].bids[0].params.referrer;
-    } else {
-      lastLocation = adUnitArr.bids[0].params.referrer;
-    }
-  } catch (error) {
-    console.error('Error while extracting lastLocation from adUnit', error);
+  if (utils.isArray(adUnitArr)) {
+    lastLocation = extractLastLocationFromArray(adUnitArr);
+  } else {
+    lastLocation = extractLastLocationFromObject(adUnitArr);
   }
 }

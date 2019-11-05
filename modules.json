@@ -18,5 +18,6 @@
     "criteoBidAdapter",
     "audienceNetworkBidAdapter",
     "currency",
+    "schain",
     "marfeelAnalyticsAdapter"
 ]

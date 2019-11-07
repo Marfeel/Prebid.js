@@ -7,14 +7,14 @@ import { userSync } from './userSync.js';
 import { loadScript } from './adloader';
 import { config } from './config';
 import { auctionManager } from './auctionManager';
-import { targeting, getHighestCpmBidsFromBidPool } from './targeting';
+import { targeting, getHighestCpmBidsFromBidPool, bidsByReferrer } from './targeting';
 import { hook } from './hook';
 import { sessionLoader } from './debugging';
 import includes from 'core-js/library/fn/array/includes';
 import { adunitCounter } from './adUnits';
 import { isRendererRequired, executeRenderer } from './Renderer';
 import { createBid } from './bidfactory';
-import { setLastLocationFromLastAdUnit } from './marfeelTools';
+import { setLastLocationFromLastAdUnit, getLastLocation } from './marfeelTools';
 
 const $$PREBID_GLOBAL$$ = getGlobal();
 const CONSTANTS = require('./constants.json');
@@ -840,5 +840,23 @@ $$PREBID_GLOBAL$$.processQueue = function() {
   processQueue($$PREBID_GLOBAL$$.que);
   processQueue($$PREBID_GLOBAL$$.cmd);
 };
+
+/**
+ * @alias module:pbjs.isBidCached
+ */
+$$PREBID_GLOBAL$$.isBidCached = function(bidId) {
+  var lastLocation = getLastLocation();
+  var bidsIds = [];
+
+  if (!bidsByReferrer[lastLocation] || bidsByReferrer[lastLocation].length < 2) {
+    return false;
+  }
+
+  bidsByReferrer[lastLocation].forEach(function(bid) {
+    bidsIds.push(bid.adId);
+  });
+
+  return bidsIds.indexOf(bidId) !== -1 && bidsIds.indexOf(bidId) !== bidsIds.lastIndexOf(bidId);
+}
 
 export default $$PREBID_GLOBAL$$;

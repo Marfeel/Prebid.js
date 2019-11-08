@@ -344,6 +344,8 @@ export function auctionCallbacks(auctionDone, auctionInstance) {
   function addBidResponse(adUnitCode, bid) {
     let bidderRequest = this;
 
+    bid.referer = bidderRequest.refererInfo && bidderRequest.refererInfo.referer;
+
     bidResponseMap[bid.requestId] = true;
 
     outstandingBidsAdded++;

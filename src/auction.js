@@ -341,10 +341,30 @@ export function auctionCallbacks(auctionDone, auctionInstance) {
     }
   }
 
+  function getBidReferer(bidderRequest, adId) {
+    const bids = bidderRequest.bids;
+    const NO_REFERER = 'no-referer';
+    const NO_REFERER_LOG = 'Bid with no referer';
+
+    if (!bids) {
+      console.warn(NO_REFERER_LOG);
+      return NO_REFERER;
+    }
+
+    const bid = bids.filter(bid => bid.adId === adId)[0];
+
+    if (bid && bid.params && bid.params.referer) {
+      return bid.params.referer;
+    } else {
+      console.warn(NO_REFERER_LOG);
+      return NO_REFERER;
+    }
+  }
+
   function addBidResponse(adUnitCode, bid) {
     let bidderRequest = this;
 
-    bid.referer = bidderRequest.refererInfo && bidderRequest.refererInfo.referer;
+    bid.referer = getBidReferer(bidderRequest, bid.adId);
 
     bidResponseMap[bid.requestId] = true;
 

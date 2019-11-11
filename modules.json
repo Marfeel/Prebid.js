@@ -17,6 +17,7 @@
     "consentManagement",
     "criteoBidAdapter",
     "audienceNetworkBidAdapter",
+    "teadsBidAdapter",
     "currency",
     "schain",
     "marfeelAnalyticsAdapter"

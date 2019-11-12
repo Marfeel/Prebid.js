@@ -10,7 +10,7 @@ import { getLastLocation } from './marfeelTools';
 const utils = require('./utils.js');
 var CONSTANTS = require('./constants.json');
 
-export const bidsByReferrer = {};
+const bidsByReferrer = {};
 
 var pbTargetingKeys = [];
 

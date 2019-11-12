@@ -341,30 +341,30 @@ export function auctionCallbacks(auctionDone, auctionInstance) {
     }
   }
 
-  function getBidReferer(bidderRequest, adId) {
+  function getBidReferrer(bidderRequest) {
     const bids = bidderRequest.bids;
-    const NO_REFERER = 'no-referer';
-    const NO_REFERER_LOG = 'Bid with no referer';
+    const NO_REFERRER = 'no-referrer';
+    const NO_REFERRER_LOG = 'Bid with no referrer';
 
-    if (!bids) {
-      console.warn(NO_REFERER_LOG);
-      return NO_REFERER;
+    if (!bids || bids.length < 1) {
+      console.warn(NO_REFERRER_LOG);
+      return NO_REFERRER;
     }
 
-    const bid = bids.filter(bid => bid.adId === adId)[0];
+    const bid = bids[0];
 
-    if (bid && bid.params && bid.params.referer) {
-      return bid.params.referer;
+    if (bid && bid.params && bid.params.referrer) {
+      return bid.params.referrer;
     } else {
-      console.warn(NO_REFERER_LOG);
-      return NO_REFERER;
+      console.warn(NO_REFERRER_LOG);
+      return NO_REFERRER;
     }
   }
 
   function addBidResponse(adUnitCode, bid) {
     let bidderRequest = this;
 
-    bid.referer = getBidReferer(bidderRequest, bid.adId);
+    bid.referrer = getBidReferrer(bidderRequest);
 
     bidResponseMap[bid.requestId] = true;
 

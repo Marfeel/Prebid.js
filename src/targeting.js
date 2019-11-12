@@ -361,7 +361,7 @@ export function newTargeting(auctionManager) {
     } else {
       const lastLocation = getLastLocation();
 
-      bidsByReferrer[lastLocation] = bidsReceived.filter(bid => bid.referer === lastLocation);
+      bidsByReferrer[lastLocation] = bidsReceived.filter(bid => bid.referrer === lastLocation);
 
       bidsToProcess = bidsByReferrer[lastLocation] || filterBidsByAdUnit(bidsReceived);
     }

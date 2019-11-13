@@ -10,6 +10,8 @@ import { getLastLocation } from './marfeelTools';
 const utils = require('./utils.js');
 var CONSTANTS = require('./constants.json');
 
+const bidsByReferrer = {};
+
 var pbTargetingKeys = [];
 
 const MAX_DFP_KEYLENGTH = 20;
@@ -344,8 +346,6 @@ export function newTargeting(auctionManager) {
     return auctionManager.getAdUnitCodes() || [];
   }
 
-  const bidsByReferrer = {};
-
   /**
    * bid caching done with all bids specifically for Marfeel purposes due to its own configuration
    */
@@ -361,9 +361,7 @@ export function newTargeting(auctionManager) {
     } else {
       const lastLocation = getLastLocation();
 
-      bidsReceived.forEach(function (bidReceived) {
-        bidsByReferrer[lastLocation] = (bidsByReferrer[lastLocation]) ? [...bidsByReferrer[lastLocation], bidReceived] : [bidReceived];
-      });
+      bidsByReferrer[lastLocation] = bidsReceived.filter(bid => bid.referrer === lastLocation);
 
       bidsToProcess = bidsByReferrer[lastLocation] || filterBidsByAdUnit(bidsReceived);
     }

@@ -7,7 +7,7 @@ import { userSync } from './userSync.js';
 import { loadScript } from './adloader';
 import { config } from './config';
 import { auctionManager } from './auctionManager';
-import { targeting, getHighestCpmBidsFromBidPool } from './targeting';
+import { targeting, getHighestCpmBidsFromBidPool, bidsByReferrer } from './targeting';
 import { hook } from './hook';
 import { sessionLoader } from './debugging';
 import includes from 'core-js/library/fn/array/includes';
@@ -840,5 +840,30 @@ $$PREBID_GLOBAL$$.processQueue = function() {
   processQueue($$PREBID_GLOBAL$$.que);
   processQueue($$PREBID_GLOBAL$$.cmd);
 };
+
+$$PREBID_GLOBAL$$.logBidsByReferrer = function() {
+  console.log(bidsByReferrer);
+};
+
+/**
+ * @alias module:pbjs.isBidCached
+ */
+$$PREBID_GLOBAL$$.isBidCached = function(adId) {
+  let isCached = false;
+
+  if (!bidsByReferrer) {
+    return isCached;
+  }
+
+  Object.keys(bidsByReferrer).forEach(function(referrer) {
+    bidsByReferrer[referrer].forEach(function(bid) {
+      if (bid.adId === adId) {
+        isCached = !!bid.cached;
+      }
+    });
+  })
+
+  return isCached;
+}
 
 export default $$PREBID_GLOBAL$$;

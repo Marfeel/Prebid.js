@@ -10,7 +10,7 @@ import { getLastLocation } from './marfeelTools';
 const utils = require('./utils.js');
 var CONSTANTS = require('./constants.json');
 
-const bidsByReferrer = {};
+export const bidsByReferrer = {};
 
 var pbTargetingKeys = [];
 
@@ -350,6 +350,7 @@ export function newTargeting(auctionManager) {
    * bid caching done with all bids specifically for Marfeel purposes due to its own configuration
    */
   const filterBidsByAdUnit = (bidsReceived) => bidsReceived.filter(bid => latestAuctionForAdUnit[bid.adUnitCode] === bid.auctionId);
+  const findBidInBidsByReferrer = (bid, lastLocation) => bidsByReferrer[lastLocation] && bidsByReferrer[lastLocation].find(bidCached => bidCached.adId === bid.adId);
 
   function getBidsReceived() {
     let bidsReceived = auctionManager.getBidsReceived();
@@ -361,7 +362,12 @@ export function newTargeting(auctionManager) {
     } else {
       const lastLocation = getLastLocation();
 
-      bidsByReferrer[lastLocation] = bidsReceived.filter(bid => bid.referrer === lastLocation);
+      bidsByReferrer[lastLocation] = bidsReceived
+        .filter(bid => bid.referrer === lastLocation)
+        .map(bid => {
+          bid.cached = !!findBidInBidsByReferrer(bid, lastLocation);
+          return bid;
+        });
 
       bidsToProcess = bidsByReferrer[lastLocation] || filterBidsByAdUnit(bidsReceived);
     }

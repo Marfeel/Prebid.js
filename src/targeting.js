@@ -350,7 +350,7 @@ export function newTargeting(auctionManager) {
    * bid caching done with all bids specifically for Marfeel purposes due to its own configuration
    */
   const filterBidsByAdUnit = (bidsReceived) => bidsReceived.filter(bid => latestAuctionForAdUnit[bid.adUnitCode] === bid.auctionId);
-  const isBidAlreadyRecieved = (bid, lastLocation) => bidsByReferrer[lastLocation] && !!bidsByReferrer[lastLocation].find(bidCached => bidCached.adId === bid.adId);
+  const isBidAlreadyRecieved = (bid, lastLocation) => !!bidsByReferrer[lastLocation] && !!bidsByReferrer[lastLocation].find(bidCached => bidCached.adId === bid.adId);
 
   function getBidsReceived() {
     let bidsReceived = auctionManager.getBidsReceived();

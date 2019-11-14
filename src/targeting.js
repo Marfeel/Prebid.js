@@ -364,10 +364,10 @@ export function newTargeting(auctionManager) {
 
       bidsByReferrer[lastLocation] = bidsReceived
         .filter(bid => bid.referrer === lastLocation)
-        .map(bid => {
-          bid.cached = isBidAlreadyRecieved(bid, lastLocation);
-          return bid;
-        });
+        .map(bid => ({
+          ...bid,
+          cached: isBidAlreadyRecieved(bid, lastLocation)
+        }));
 
       bidsToProcess = bidsByReferrer[lastLocation] || filterBidsByAdUnit(bidsReceived);
     }

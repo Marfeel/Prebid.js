@@ -366,7 +366,9 @@ export function newTargeting(auctionManager) {
         .filter(bid => bid.referrer === lastLocation)
         .map(bid => ({
           ...bid,
-          cached: isBidAlreadyRecieved(bid, lastLocation)
+          [CONSTANTS.JSON_MAPPING.ADSERVER_TARGETING]: {
+            ...bid[CONSTANTS.JSON_MAPPING.ADSERVER_TARGETING],
+            [CONSTANTS.TARGETING_KEYS.CACHED]: isBidAlreadyRecieved(bid, lastLocation)}
         }));
 
       bidsToProcess = bidsByReferrer[lastLocation] || filterBidsByAdUnit(bidsReceived);

@@ -858,7 +858,7 @@ $$PREBID_GLOBAL$$.isBidCached = function(adId) {
   Object.keys(bidsByReferrer).forEach(function(referrer) {
     bidsByReferrer[referrer].forEach(function(bid) {
       if (bid.adId === adId) {
-        isCached = !!bid.cached;
+        isCached = !!bid.adserverTargeting.hb_cached;
       }
     });
   })

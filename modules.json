@@ -18,6 +18,8 @@
     "criteoBidAdapter",
     "audienceNetworkBidAdapter",
     "teadsBidAdapter",
+    "improvedigitalBidAdapter",
+    "improvedigitalClientBidAdapter",
     "currency",
     "schain",
     "marfeelAnalyticsAdapter"

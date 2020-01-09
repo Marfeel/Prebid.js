@@ -397,7 +397,7 @@ export function newTargeting(auctionManager) {
       .map(bid => bid.adUnitCode)
       .filter(uniques)
       .map(adUnitCode => bidsReceived
-        .filter(bid => bid.adUnitCode === adUnitCode ? bid : null)
+        .filter(bid => bid.adUnitCode === adUnitCode ? bid : config.getConfig('useBidCache') ? bid : null)
         .reduce(getHighestCpm));
   };
 
@@ -443,23 +443,26 @@ export function newTargeting(auctionManager) {
     let standardKeys = getStandardKeys();
 
     winners = winners.map(winner => {
-      return {
-        [winner.adUnitCode]: Object.keys(winner.adserverTargeting)
-          .filter(key =>
-            typeof winner.sendStandardTargeting === 'undefined' ||
-            winner.sendStandardTargeting ||
-            standardKeys.indexOf(key) === -1)
-          .reduce((acc, key) => {
-            const targetingValue = [winner.adserverTargeting[key]];
-            const targeting = { [key.substring(0, MAX_DFP_KEYLENGTH)]: targetingValue };
-            if (key === CONSTANTS.TARGETING_KEYS.DEAL) {
-              const bidderCodeTargetingKey = `${key}_${winner.bidderCode}`.substring(0, MAX_DFP_KEYLENGTH);
-              const bidderCodeTargeting = { [bidderCodeTargetingKey]: targetingValue };
-              return [...acc, targeting, bidderCodeTargeting];
-            }
-            return [...acc, targeting];
-          }, [])
-      };
+      const result = {};
+      const winnerKey = config.getConfig('useBidCache') ? adUnitCodes : [winner.adUnitCode];
+
+      result[winnerKey] = Object.keys(winner.adserverTargeting)
+        .filter(key =>
+          typeof winner.sendStandardTargeting === 'undefined' ||
+          winner.sendStandardTargeting ||
+          standardKeys.indexOf(key) === -1)
+        .reduce((acc, key) => {
+          const targetingValue = [winner.adserverTargeting[key]];
+          const targeting = { [key.substring(0, MAX_DFP_KEYLENGTH)]: targetingValue };
+          if (key === CONSTANTS.TARGETING_KEYS.DEAL) {
+            const bidderCodeTargetingKey = `${key}_${winner.bidderCode}`.substring(0, MAX_DFP_KEYLENGTH);
+            const bidderCodeTargeting = { [bidderCodeTargetingKey]: targetingValue };
+            return [...acc, targeting, bidderCodeTargeting];
+          }
+          return [...acc, targeting];
+        }, []);
+
+      return result;
     });
 
     return winners;

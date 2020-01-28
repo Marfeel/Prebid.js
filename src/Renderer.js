@@ -1,6 +1,7 @@
-import { loadScript } from './adloader';
 import * as utils from './utils';
 import find from 'core-js/library/fn/array/find';
+
+const loadedScripts = [];
 
 /**
  * @typedef {object} Renderer
@@ -9,6 +10,14 @@ import find from 'core-js/library/fn/array/find';
  * These are used in Outstream Video Bids, returned on the Bid by the adapter, and will
  * be used to render that bid unless the Publisher overrides them.
  */
+
+function isScriptLoaded(script) {
+  return loadedScripts.includes(script);
+}
+
+function notifyScriptLoaded(script) {
+  loadedScripts.push(script);
+}
 
 export function Renderer(options) {
   const { url, config, id, callback, loaded, adUnitCode } = options;
@@ -36,9 +45,10 @@ export function Renderer(options) {
     this.process();
   });
 
-  if (!isRendererDefinedOnAdUnit(adUnitCode)) {
+  if (!isRendererDefinedOnAdUnit(adUnitCode) && !isScriptLoaded(url)) {
     // we expect to load a renderer url once only so cache the request to load script
-    loadScript(url, this.callback, true);
+    self.importScripts(url);
+    notifyScriptLoaded(url);
   } else {
     utils.logWarn(`External Js not loaded by Renderer since renderer url and callback is already defined on adUnit ${adUnitCode}`);
   }

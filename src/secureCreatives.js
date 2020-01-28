@@ -9,6 +9,7 @@ import { EVENTS } from './constants';
 import { replaceAuctionPrice } from './utils';
 import { auctionManager } from './auctionManager';
 import find from 'core-js/library/fn/array/find';
+import { isRendererRequired, executeRenderer } from './Renderer';
 
 const BID_WON = EVENTS.BID_WON;
 const ERROR_SECURE_CREATIVE = EVENTS.ERROR_SECURE_CREATIVE;
@@ -68,9 +69,11 @@ function receiveMessage(ev) {
 }
 
 function sendAdToCreative(adObject, remoteDomain, source) {
-  const { adId, ad, adUrl, width, height, cpm } = adObject;
+  const { adId, ad, adUrl, width, height, renderer, cpm } = adObject;
 
-  if (adId) {
+  if (isRendererRequired(renderer)) {
+    executeRenderer(renderer, adObject)
+  } else if (adId) {
     source.postMessage(JSON.stringify({
       message: 'Prebid Response',
       ad: replaceAuctionPrice(ad, cpm),

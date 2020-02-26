@@ -42,7 +42,7 @@ export const setLastLocationFromLastAdUnit = (adUnitArr) => {
   }
 }
 
-export const getLastAuctionSizes = () => {
+export const getCurrentAuctionSizes = () => {
   const lastAdUnitUsed = [...auctionManager.getAdUnits()].pop();
 
   if (lastAdUnitUsed &&
@@ -56,14 +56,11 @@ export const getLastAuctionSizes = () => {
   return [];
 }
 
-const SIZE_JOINER = 'x';
+const normalizeSizes = sizesArray = sizesArray.join('x');
 
-export const filterBidsBySizes = (sizesToFilter) => {
-  const sizesToFilterUnified = sizesToFilter.map(sizes => sizes.join(SIZE_JOINER));
+export const isBidSizeAllowed = (bid, allowedSizes) => {
+  const allowedSizesNormalized = allowedSizes.map(normalizeSizes);
+  const bidSize = normalizeSizes([bid.width, bid.height]);
 
-  return (bid) => {
-    const bidSize = [bid.width, bid.height].join(SIZE_JOINER);
-
-    return sizesToFilterUnified.includes(bidSize);
-  }
+  return allowedSizesNormalized.includes(bidSize);
 }

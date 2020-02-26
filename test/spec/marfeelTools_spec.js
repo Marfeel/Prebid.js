@@ -15,7 +15,7 @@
 import { filterBidsBySizes } from './marfeelTools';
 
 describe('marfeelTools', function () {
-  describe('filterBidsBySizes', function() {
+  describe('isBidSizeAllowed', function() {
     it('filter bids within the proper sizes', function () {
       const bidsToFilter = [{
         height: 100,
@@ -31,7 +31,7 @@ describe('marfeelTools', function () {
         width: 200
       }];
       const sizesToFilter = [[100, 200], [200, 200]];
-      const bidsFiltered = bidsToFilter.filter(filterBidsBySizes(sizesToFilter));
+      const bidsFiltered = bidsToFilter.filter(bid => isBidSizeAllowed(bid, sizesToFilter));
 
       assert.deepEqual(bidsFiltered, [{
         height: 100,

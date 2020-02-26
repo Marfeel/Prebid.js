@@ -13,6 +13,7 @@
  */
 
 const utils = require('./utils.js');
+const { auctionManager } = require('./auctionManager');
 
 var lastLocation;
 
@@ -39,4 +40,27 @@ export const setLastLocationFromLastAdUnit = (adUnitArr) => {
   } else {
     lastLocation = extractLastLocationFromObject(adUnitArr);
   }
+}
+
+export const getCurrentAuctionSizes = () => {
+  const lastAdUnitUsed = [...auctionManager.getAdUnits()].pop();
+
+  if (lastAdUnitUsed &&
+      lastAdUnitUsed.mediaTypes &&
+      lastAdUnitUsed.mediaTypes['banner'] &&
+      lastAdUnitUsed.mediaTypes['banner'].sizes
+  ) {
+    return lastAdUnitUsed.mediaTypes['banner'].sizes;
+  }
+
+  return [];
+}
+
+const normalizeSizes = sizesArray = sizesArray.join('x');
+
+export const isBidSizeAllowed = (bid, allowedSizes) => {
+  const allowedSizesNormalized = allowedSizes.map(normalizeSizes);
+  const bidSize = normalizeSizes([bid.width, bid.height]);
+
+  return allowedSizesNormalized.includes(bidSize);
 }

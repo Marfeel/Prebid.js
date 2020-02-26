@@ -41,11 +41,6 @@ export const setLastLocationFromLastAdUnit = (adUnitArr) => {
     lastLocation = extractLastLocationFromObject(adUnitArr);
   }
 }
-<<<<<<< HEAD
-=======
-<<<<<<< Updated upstream
-=======
->>>>>>> fix typo
 
 export const getCurrentAuctionSizes = () => {
   const lastAdUnitUsed = [...auctionManager.getAdUnits()].pop();
@@ -61,11 +56,7 @@ export const getCurrentAuctionSizes = () => {
   return [];
 }
 
-<<<<<<< HEAD
-const normalizeSizes = sizesArray = sizesArray.join('x');
-=======
 const normalizeSizes = sizesArray => sizesArray.join('x');
->>>>>>> fix typo
 
 export const isBidSizeAllowed = (bid, allowedSizes) => {
   const allowedSizesNormalized = allowedSizes.map(normalizeSizes);
@@ -73,7 +64,3 @@ export const isBidSizeAllowed = (bid, allowedSizes) => {
 
   return allowedSizesNormalized.includes(bidSize);
 }
-<<<<<<< HEAD
-=======
->>>>>>> Stashed changes
->>>>>>> fix typo

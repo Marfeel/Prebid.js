@@ -12,7 +12,8 @@
  * from Marfeel Solutions SL.
  */
 
-import { filterBidsBySizes } from './marfeelTools';
+import { isBidSizeAllowed, getAllowedSizes } from './marfeelTools';
+import { auctionManager } from './auctionManager';
 
 describe('marfeelTools', function () {
   describe('isBidSizeAllowed', function() {
@@ -40,6 +41,37 @@ describe('marfeelTools', function () {
         height: 200,
         width: 200
       }])
+    });
+  });
+  describe('getAllowedSizes', function() {
+    it('adds 1x1 to allowed sizes if 300x250 is present', function() {
+      const currentSizes = [[100, 100], [300, 150], [300, 250]];
+      const fakeGetAdUnits = () => [{
+        mediaTypes: {
+          banner: {
+            sizes: currentSizes
+          }
+        }
+      }];
+      sinon.replace(auctionManager, 'getAdUnits', fakeGetAdUnits);
+      const expectedSizes = [[100, 100], [300, 150], [300, 250], [1, 1]];
+
+      assert.deepEqual(getAllowedSizes(), expectedSizes);
+    });
+
+    it('does not add 1x1 to allowed sizes if 300x250 is not present', function() {
+      const currentSizes = [[100, 100], [300, 150]];
+      const fakeGetAdUnits = () => [{
+        mediaTypes: {
+          banner: {
+            sizes: currentSizes
+          }
+        }
+      }];
+      sinon.replace(auctionManager, 'getAdUnits', fakeGetAdUnits);
+      const expectedSizes = [[100, 100], [300, 150]];
+
+      assert.deepEqual(getAllowedSizes(), expectedSizes);
     });
   });
 });

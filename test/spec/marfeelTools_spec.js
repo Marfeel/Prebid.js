@@ -12,7 +12,7 @@
  * from Marfeel Solutions SL.
  */
 
-import { isBidSizeAllowed, allow1x1ForLargeSizes } from './marfeelTools';
+import { isBidSizeAllowed, add1x1IfAllowed } from './marfeelTools';
 
 describe('marfeelTools', function () {
   describe('isBidSizeAllowed', function() {
@@ -46,7 +46,7 @@ describe('marfeelTools', function () {
       const currentSizes = [[100, 100], [300, 150], [300, 250]];
       const expectedSizes = [[100, 100], [300, 150], [300, 250], [2, 1]];
 
-      assert.deepEqual(allow1x1ForLargeSizes(currentSizes), expectedSizes);
+      assert.deepEqual(add1x1IfAllowed(currentSizes), expectedSizes);
     });
   });
 });

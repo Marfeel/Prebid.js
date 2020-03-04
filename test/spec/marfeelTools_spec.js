@@ -42,7 +42,8 @@ describe('marfeelTools', function () {
         width: 200
       }])
     });
-
+  });
+  describe('getAllowedSizes', function() {
     it('adds 1x1 to allowed sizes if 300x250 is present', function() {
       const currentSizes = [[100, 100], [300, 150], [300, 250]];
       const fakeGetAdUnits = () => [{

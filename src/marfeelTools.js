@@ -17,6 +17,9 @@ const { auctionManager } = require('./auctionManager');
 
 var lastLocation;
 
+const VIDEO_SIZE = [1, 1];
+const LARGE_SIZE_NORMALIZED = '300x250';
+
 export const getLastLocation = () => lastLocation;
 
 const extractLastLocationFromArray = (adUnitArr) => (
@@ -42,6 +45,10 @@ export const setLastLocationFromLastAdUnit = (adUnitArr) => {
   }
 }
 
+const normalizeSizes = sizesArray => sizesArray.join('x');
+export const allow1x1ForLargeSizes = (allowedSizes) => (allowedSizes.map(normalizeSizes)
+  .includes(LARGE_SIZE_NORMALIZED)) ? [...allowedSizes, VIDEO_SIZE] : allowedSizes;
+
 export const getCurrentAuctionSizes = () => {
   const lastAdUnitUsed = [...auctionManager.getAdUnits()].pop();
 
@@ -50,13 +57,11 @@ export const getCurrentAuctionSizes = () => {
       lastAdUnitUsed.mediaTypes['banner'] &&
       lastAdUnitUsed.mediaTypes['banner'].sizes
   ) {
-    return lastAdUnitUsed.mediaTypes['banner'].sizes;
+    return allow1x1ForLargeSizes(lastAdUnitUsed.mediaTypes['banner'].sizes);
   }
 
   return [];
 }
-
-const normalizeSizes = sizesArray => sizesArray.join('x');
 
 export const isBidSizeAllowed = (bid, allowedSizes) => {
   const allowedSizesNormalized = allowedSizes.map(normalizeSizes);

@@ -71,7 +71,7 @@ export const isBidSizeAllowed = (bid, allowedSizes) => {
   return allowedSizesNormalized.includes(bidSize);
 }
 
-export function add1x1IfAllowed(auctionSizes) {
+function add1x1IfAllowed(auctionSizes) {
   const SIZE_1_X_1 = [1, 1];
 
   return is1x1Allowed(auctionSizes) ? [...auctionSizes, SIZE_1_X_1] : auctionSizes;

@@ -13,6 +13,7 @@
  */
 
 import { isBidSizeAllowed, add1x1IfAllowed } from './marfeelTools';
+import { auctionManager } from './auctionManager';
 
 describe('marfeelTools', function () {
   describe('isBidSizeAllowed', function() {
@@ -44,9 +45,17 @@ describe('marfeelTools', function () {
 
     it('adds 1x1 to allowed sizes if 300x250 is present', function() {
       const currentSizes = [[100, 100], [300, 150], [300, 250]];
-      const expectedSizes = [[100, 100], [300, 150], [300, 250], [2, 1]];
+      const fakeGetAdUnits = () => [{
+        mediaTypes: {
+          banner: {
+            sizes: currentSizes
+          }
+        }
+      }];
+      sinon.replace(auctionManager, 'getAdUnits', fakeGetAdUnits);
+      const expectedSizes = [[100, 100], [300, 150], [300, 250], [1, 1]];
 
-      assert.deepEqual(add1x1IfAllowed(currentSizes), expectedSizes);
+      assert.deepEqual(getAllowedSizes(), expectedSizes);
     });
   });
 });

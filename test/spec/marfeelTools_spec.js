@@ -57,5 +57,20 @@ describe('marfeelTools', function () {
 
       assert.deepEqual(getAllowedSizes(), expectedSizes);
     });
+
+    it('does not add 1x1 to allowed sizes if 300x250 is not present', function() {
+      const currentSizes = [[100, 100], [300, 150]];
+      const fakeGetAdUnits = () => [{
+        mediaTypes: {
+          banner: {
+            sizes: currentSizes
+          }
+        }
+      }];
+      sinon.replace(auctionManager, 'getAdUnits', fakeGetAdUnits);
+      const expectedSizes = [[100, 100], [300, 150]];
+
+      assert.deepEqual(getAllowedSizes(), expectedSizes);
+    });
   });
 });

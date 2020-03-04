@@ -12,7 +12,7 @@
  * from Marfeel Solutions SL.
  */
 
-import { isBidSizeAllowed, add1x1IfAllowed } from './marfeelTools';
+import { isBidSizeAllowed, getAllowedSizes } from './marfeelTools';
 import { auctionManager } from './auctionManager';
 
 describe('marfeelTools', function () {

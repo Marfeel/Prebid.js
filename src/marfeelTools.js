@@ -42,7 +42,15 @@ export const setLastLocationFromLastAdUnit = (adUnitArr) => {
   }
 }
 
-export const getCurrentAuctionSizes = () => {
+const normalizeSizes = sizesArray => sizesArray.join('x');
+
+function is1x1Allowed(auctionSizes) {
+  const LARGE_SIZE_NORMALIZED = '300x250';
+
+  return (auctionSizes.map(normalizeSizes).includes(LARGE_SIZE_NORMALIZED));
+}
+
+const getCurrentAuctionSizes = () => {
   const lastAdUnitUsed = [...auctionManager.getAdUnits()].pop();
 
   if (lastAdUnitUsed &&
@@ -56,11 +64,19 @@ export const getCurrentAuctionSizes = () => {
   return [];
 }
 
-const normalizeSizes = sizesArray => sizesArray.join('x');
-
 export const isBidSizeAllowed = (bid, allowedSizes) => {
   const allowedSizesNormalized = allowedSizes.map(normalizeSizes);
   const bidSize = normalizeSizes([bid.width, bid.height]);
 
   return allowedSizesNormalized.includes(bidSize);
+}
+
+function add1x1IfAllowed(auctionSizes) {
+  const SIZE_1_X_1 = [1, 1];
+
+  return is1x1Allowed(auctionSizes) ? [...auctionSizes, SIZE_1_X_1] : auctionSizes;
+}
+
+export function getAllowedSizes() {
+  return add1x1IfAllowed(getCurrentAuctionSizes())
 }

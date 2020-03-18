@@ -369,13 +369,14 @@ export function newTargeting(auctionManager) {
           [CONSTANTS.JSON_MAPPING.ADSERVER_TARGETING]: {
             ...bid[CONSTANTS.JSON_MAPPING.ADSERVER_TARGETING],
             [CONSTANTS.TARGETING_KEYS.CACHED]: isBidAlreadyRecieved(bid, lastLocation)}
-        }))
-        .filter(bid => !(isBidCached(bid) && getBidName(bid) === 'teads'));
+        }));
 
       const bidsToFilter = bidsByReferrer[lastLocation] || filterBidsByAdUnit(bidsReceived);
       const allowedSizes = getAllowedSizes();
 
-      bidsToProcess = bidsToFilter.filter(bid => isBidSizeAllowed(bid, allowedSizes));
+      bidsToProcess = bidsToFilter
+        .filter(bid => isBidSizeAllowed(bid, allowedSizes))
+        .filter(bid => !(isBidCached(bid) && getBidName(bid) === 'teads'));
     }
 
     bidsToProcess = bidsToProcess

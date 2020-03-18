@@ -18,6 +18,8 @@ const { auctionManager } = require('./auctionManager');
 
 var lastLocation;
 
+export const blacklistedCacheBidders = ['teads'];
+
 export const getLastLocation = () => lastLocation;
 
 const extractLastLocationFromArray = (adUnitArr) => (
@@ -82,6 +84,8 @@ export function getAllowedSizes() {
   return add1x1IfAllowed(getCurrentAuctionSizes())
 }
 
-export const isBidCached = (bid) => bid[CONSTANTS.JSON_MAPPING.ADSERVER_TARGETING][CONSTANTS.TARGETING_KEYS.CACHED];
+const isBidCached = (bid) => bid[CONSTANTS.JSON_MAPPING.ADSERVER_TARGETING][CONSTANTS.TARGETING_KEYS.CACHED];
 
-export const getBidName = (bid) => bid[CONSTANTS.JSON_MAPPING.ADSERVER_TARGETING][CONSTANTS.TARGETING_KEYS.BIDDER];
+const getBidName = (bid) => bid[CONSTANTS.JSON_MAPPING.ADSERVER_TARGETING][CONSTANTS.TARGETING_KEYS.BIDDER];
+
+export const isBidAllowed = (bid) => !(isBidCached(bid) && blacklistedCacheBidders.includes(getBidName(bid)));

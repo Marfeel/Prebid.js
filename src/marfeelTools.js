@@ -13,6 +13,7 @@
  */
 
 const utils = require('./utils.js');
+const CONSTANTS = require('./constants.json');
 
 var lastLocation;
 
@@ -40,3 +41,7 @@ export const setLastLocationFromLastAdUnit = (adUnitArr) => {
     lastLocation = extractLastLocationFromObject(adUnitArr);
   }
 }
+
+export const isBidCached = (bid) => bid[CONSTANTS.JSON_MAPPING.ADSERVER_TARGETING][CONSTANTS.TARGETING_KEYS.CACHED];
+
+export const getBidName = (bid) => bid[CONSTANTS.JSON_MAPPING.ADSERVER_TARGETING][CONSTANTS.TARGETING_KEYS.BIDDER];

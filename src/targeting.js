@@ -5,7 +5,7 @@ import { auctionManager } from './auctionManager';
 import { sizeSupported } from './sizeMapping';
 import { ADPOD } from './mediaTypes';
 import includes from 'core-js/library/fn/array/includes';
-import { getLastLocation } from './marfeelTools';
+import { getLastLocation, getBidName, isBidCached } from './marfeelTools';
 
 const utils = require('./utils.js');
 var CONSTANTS = require('./constants.json');
@@ -369,7 +369,8 @@ export function newTargeting(auctionManager) {
           [CONSTANTS.JSON_MAPPING.ADSERVER_TARGETING]: {
             ...bid[CONSTANTS.JSON_MAPPING.ADSERVER_TARGETING],
             [CONSTANTS.TARGETING_KEYS.CACHED]: isBidAlreadyRecieved(bid, lastLocation)}
-        }));
+        }))
+        .filter(bid => !(isBidCached(bid) && getBidName(bid) === 'teads'));
 
       bidsToProcess = bidsByReferrer[lastLocation] || filterBidsByAdUnit(bidsReceived);
     }

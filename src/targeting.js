@@ -5,7 +5,7 @@ import { auctionManager } from './auctionManager';
 import { sizeSupported } from './sizeMapping';
 import { ADPOD } from './mediaTypes';
 import includes from 'core-js/library/fn/array/includes';
-import { getLastLocation, getAllowedSizes, isBidSizeAllowed } from './marfeelTools';
+import { getLastLocation, isBidAllowed, getAllowedSizes, isBidSizeAllowed } from './marfeelTools';
 
 const utils = require('./utils.js');
 var CONSTANTS = require('./constants.json');
@@ -374,7 +374,9 @@ export function newTargeting(auctionManager) {
       const bidsToFilter = bidsByReferrer[lastLocation] || filterBidsByAdUnit(bidsReceived);
       const allowedSizes = getAllowedSizes();
 
-      bidsToProcess = bidsToFilter.filter(bid => isBidSizeAllowed(bid, allowedSizes));
+      bidsToProcess = bidsToFilter
+        .filter(bid => isBidAllowed(bid))
+        .filter(bid => isBidSizeAllowed(bid, allowedSizes));
     }
 
     bidsToProcess = bidsToProcess

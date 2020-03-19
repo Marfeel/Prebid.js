@@ -12,7 +12,7 @@
  * from Marfeel Solutions SL.
  */
 
-import { isBidSizeAllowed, getAllowedSizes } from './marfeelTools';
+import { isBidSizeAllowed, getAllowedSizes, isBidAllowed } from './marfeelTools';
 import { auctionManager } from './auctionManager';
 
 describe('marfeelTools', function () {
@@ -72,6 +72,39 @@ describe('marfeelTools', function () {
       const expectedSizes = [[100, 100], [300, 150]];
 
       assert.deepEqual(getAllowedSizes(), expectedSizes);
+    });
+  });
+  describe('isBidAllowed', function() {
+    it('returns false with disallowed Bid', function() {
+      const disAllowedBid = {
+        adserverTargeting:
+        {
+          hb_bidder: 'teads',
+          hb_cached: true
+        }
+      };
+
+      assert.deepEqual(isBidAllowed(disAllowedBid), false);
+    });
+
+    it('returns true with allowed Bid', function() {
+      const allowedBid1 = {
+        adserverTargeting:
+        {
+          hb_bidder: 'teads',
+          hb_cached: false
+        }
+      };
+
+      const allowedBid2 = {
+        adserverTargeting:
+        {
+          hb_bidder: 'rubicon',
+          hb_cached: true
+        }
+      };
+      assert.deepEqual(isBidAllowed(allowedBid1), true);
+      assert.deepEqual(isBidAllowed(allowedBid2), true);
     });
   });
 });

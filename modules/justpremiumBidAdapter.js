@@ -148,7 +148,7 @@ function track (data, payload, type) {
   }
 
   if (window.top == window) {
-    pubUrl = window.originalLocation.href
+    pubUrl = window.location.href
   } else {
     try {
       pubUrl = window.top.location.href

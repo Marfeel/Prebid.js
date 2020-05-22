@@ -91,7 +91,7 @@ export const spec = {
       var obj = {};
       obj.id = dmx.bidId;
       obj.tagid = String(dmx.params.dmxid);
-      obj.secure = window.originalLocation.protocol === 'https:' ? 1 : 0;
+      obj.secure = window.location.protocol === 'https:' ? 1 : 0;
       obj.banner = {
         topframe: 1,
         w: dmx.sizes[0][0] || 0,
@@ -112,7 +112,7 @@ export const spec = {
     }
   },
   test() {
-    return window.originalLocation.href.indexOf('dmTest=true') !== -1 ? 1 : 0;
+    return window.location.href.indexOf('dmTest=true') !== -1 ? 1 : 0;
   },
   getUserSyncs(optionsType) {
     if (optionsType.iframeEnabled) {

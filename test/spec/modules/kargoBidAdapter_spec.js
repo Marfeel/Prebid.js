@@ -265,7 +265,7 @@ describe('kargo adapter tests', function () {
             'reha00jnu'
           ]
         },
-        pageURL: window.originalLocation.href,
+        pageURL: window.location.href,
         prebidRawBidRequests: [
           {
             bidId: 1,

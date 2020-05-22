@@ -300,7 +300,7 @@ export function getWindowSelf() {
 }
 
 export function getWindowLocation() {
-  return window.originalLocation;
+  return window.location;
 }
 
 /**
@@ -395,7 +395,7 @@ export function createInvisibleIframe() {
 export function getParameterByName(name) {
   var regexS = '[\\?&]' + name + '=([^&#]*)';
   var regex = new RegExp(regexS);
-  var results = regex.exec(window.originalLocation.search);
+  var results = regex.exec(window.location.search);
   if (results === null) {
     return '';
   }
@@ -1054,10 +1054,10 @@ export function getUserConfiguredParams(adUnits, adUnitCode, bidder) {
  */
 export function getOrigin() {
   // IE10 does not have this property. https://gist.github.com/hbogs/7908703
-  if (!window.originalLocation.origin) {
-    return window.originalLocation.protocol + '//' + window.originalLocation.hostname + (window.originalLocation.port ? ':' + window.originalLocation.port : '');
+  if (!window.location.origin) {
+    return window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '');
   } else {
-    return window.originalLocation.origin;
+    return window.location.origin;
   }
 }
 

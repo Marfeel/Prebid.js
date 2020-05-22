@@ -384,7 +384,7 @@ roxotAdapter.initConfig = function (config) {
   initOptions.server = initOptions.options.server || DEFAULT_EVENT_URL;
   initOptions.configServer = initOptions.options.configServer || (initOptions.options.server || DEFAULT_SERVER_CONFIG_URL);
   initOptions.utmTagData = this.buildUtmTagData();
-  initOptions.host = initOptions.options.host || window.originalLocation.hostname;
+  initOptions.host = initOptions.options.host || window.location.hostname;
   initOptions.device = detectDevice();
 
   loadServerConfig();

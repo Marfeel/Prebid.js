@@ -47,7 +47,7 @@ export const spec = {
     if (!data.gdprApplies || data.consentGiven) {
       return {
         method: 'GET',
-        url: `${window.originalLocation.protocol}//udmserve.net/udm/img.fetch`,
+        url: `${window.location.protocol}//udmserve.net/udm/img.fetch`,
         data: data,
         bidParams: validBidRequests
       };
@@ -129,7 +129,7 @@ function makeNotification(bid, mid, bidParam) {
 function getUrlVars() {
   var vars = {};
   var hash;
-  var hashes = window.originalLocation.href.slice(window.originalLocation.href.indexOf('?') + 1).split('&');
+  var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
   for (var i = 0; i < hashes.length; i++) {
     hash = hashes[i].split('=');
     if (hash[0].match(/^utm_/)) {

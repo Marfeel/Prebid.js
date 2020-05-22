@@ -192,7 +192,7 @@ export const spec = {
     return {
       userIDs: spec._getUserIds(tdid),
       krux: spec._getKrux(),
-      pageURL: window.originalLocation.href,
+      pageURL: window.location.href,
       rawCRB: spec._readCookie('krg_crb'),
       rawCRBLocalStorage: spec._getLocalStorageSafely('krg_crb')
     };

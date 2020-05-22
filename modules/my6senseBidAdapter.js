@@ -12,7 +12,7 @@ function isBidRequestValid(bid) {
 
 function getUrl(url) {
   if (!url) {
-    url = window.originalLocation.href;// "clean" url of current web page
+    url = window.location.href;// "clean" url of current web page
   }
   var canonicalLink = null;
   // first look for meta data with property "og:url"

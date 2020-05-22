@@ -36,7 +36,7 @@ export const spec = {
         const request = buildRtbRequest(dispatch[host][zoneId], auctionId);
         requests.push({
           method: 'GET',
-          url: `${window.originalLocation.protocol}//${host}/rtbg`,
+          url: `${window.location.protocol}//${host}/rtbg`,
           data: {
             zone: Number(zoneId),
             ad_type: 'rtb',

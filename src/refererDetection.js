@@ -130,7 +130,7 @@ export function detectReferer(win) {
           let isTop = (currentWindow == win.top);
           let refData = {
             referrer: currentWindow.document.referrer || null,
-            location: currentWindow.originalLocation.href || null,
+            location: currentWindow.location.href || null,
             isTop
           }
           if (isTop) {

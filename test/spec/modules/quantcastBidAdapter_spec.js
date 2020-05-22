@@ -84,7 +84,7 @@ describe('Quantcast adapter', function () {
 
   describe('`buildRequests`', function () {
     it('selects protocol and port', function () {
-      switch (window.originalLocation.protocol) {
+      switch (window.location.protocol) {
         case 'https:':
           expect(QUANTCAST_PROTOCOL).to.equal('https');
           expect(QUANTCAST_PORT).to.equal('8443');

@@ -43,7 +43,7 @@ export const spec = {
         const request = buildRtbRequest(impDispatch[host][zoneId], auctionId, gdprConsent, bidderRequest.refererInfo);
         requests.push({
           method: 'POST',
-          url: `${window.originalLocation.protocol}//${host}/hb?zone=${zoneId}&v=${VERSION}`,
+          url: `${window.location.protocol}//${host}/hb?zone=${zoneId}&v=${VERSION}`,
           data: JSON.stringify(request)
         });
       });

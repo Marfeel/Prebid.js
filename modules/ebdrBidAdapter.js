@@ -10,8 +10,8 @@ export const spec = {
   },
   buildRequests: function(bids) {
     const rtbServerDomain = 'dsp.bnmla.com';
-    let domain = window.originalLocation.host;
-    let page = window.originalLocation.pathname + location.search + location.hash;
+    let domain = window.location.host;
+    let page = window.location.pathname + location.search + location.hash;
     let ebdrImps = [];
     const ebdrReq = {};
     let ebdrParams = {};

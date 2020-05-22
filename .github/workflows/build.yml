@@ -31,9 +31,10 @@ jobs:
     - name: ♻️ Adapt to web worker
       run: sed -i 's/location/originalLocation/g' ./build/dist/prebid.ww.js
 
-    -name: 🚀 Publish
+    - name: 🚀 Publish
       run: |
-      git config --local user.email 'tech@marfeel.com'
-      git config --local user.name 'GitHub Action'
-      
-      npm publish 
+        git config --local user.email 'tech@marfeel.com'
+        git config --local user.name 'GitHub Action'
+        
+        npm publish 
+

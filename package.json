@@ -7,10 +7,6 @@
     "test": "gulp test",
     "lint": "gulp lint"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/prebid/Prebid.js.git"
-  },
   "keywords": [
     "advertising",
     "auction",
@@ -103,5 +99,13 @@
     "fun-hooks": "^0.9.5",
     "jsencrypt": "^3.0.0-rc.1",
     "just-clone": "^1.0.2"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/Marfeel/marfeel-releases.git"
+  },
+  "files": [
+    "dist/prebid.js",
+    "dist/prebid.ww.js"
+  ]
 }

@@ -39,6 +39,15 @@ jobs:
     - name: ♻️ Adapt to web worker
       run: sed -i 's/location/originalLocation/g' ./build/dist/prebid.ww.js
 
+    - name: Upload to S3
+      run: |
+        aws s3 cp --recursive --exclude "*" --include "prebid*.js" dist/ ${{ env.BASEDIR }}/${{ env.SUBDIR }}/dist/ --cache-control "public,max-age=8640000" --content-type "application/javascript; charset=UTF-8"
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_KEY }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET }}
+        BASEDIR: s3://statics/marfeel/resources/lib/prebid/
+        SUBDIR: ${{ github.run_id }}  
+
     - name: 🚀 Publish
       run: npm publish 
 

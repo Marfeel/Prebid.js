@@ -1,5 +1,4 @@
 import * as utils from '../utils.js';
-import { registerBidder } from '../adapters/bidderFactory.js';
 import { config } from '../config.js';
 import { BANNER, NATIVE, VIDEO } from '../mediaTypes.js';
 import {Renderer} from '../Renderer.js';
@@ -390,7 +389,6 @@ function getNormalizedNativeAd(rawNative) {
   }
   return native;
 }
-registerBidder(spec);
 
 export function ImproveDigitalAdServerJSClient(endPoint) {
   this.CONSTANTS = {

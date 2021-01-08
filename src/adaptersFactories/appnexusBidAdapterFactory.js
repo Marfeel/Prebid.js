@@ -43,7 +43,7 @@ const GVLID = 32;
 export const specFactory = (bidderCode, getRdRef) => {
   const storage = getStorageManager(GVLID, bidderCode);
 
-  return ({
+  return {
     code: bidderCode,
     gvlid: GVLID,
     aliases: ['appnexusAst', 'brealtime', 'emxdigital', 'pagescience', 'defymedia', 'gourmetads', 'matomy', 'featureforward', 'oftmedia', 'districtmMbid', 'adasta', 'beintoo'],
@@ -320,7 +320,7 @@ export const specFactory = (bidderCode, getRdRef) => {
         reloadViewabilityScriptWithCorrectParameters(bid);
       }
     }
-  });
+  };
 };
 function isPopulatedArray(arr) {
   return !!(utils.isArray(arr) && arr.length > 0);

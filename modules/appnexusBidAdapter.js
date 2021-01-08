@@ -3,8 +3,8 @@ import { specFactory } from '../src/adaptersFactories/appnexusBidAdapterFactory.
 
 const BIDDER_CODE = 'appnexus';
 
-const rdRefFactory = (bidderRequest) => encodeURIComponent(bidderRequest.refererInfo.referer);
+const getRdRef = (bidderRequest) => encodeURIComponent(bidderRequest.refererInfo.referer);
 
-export const spec = specFactory(BIDDER_CODE, rdRefFactory);
+export const spec = specFactory(BIDDER_CODE, getRdRef);
 
 registerBidder(spec);

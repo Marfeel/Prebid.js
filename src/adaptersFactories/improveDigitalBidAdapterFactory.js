@@ -2,10 +2,14 @@ import * as utils from '../utils.js';
 import { config } from '../config.js';
 import { BANNER, NATIVE, VIDEO } from '../mediaTypes.js';
 import {Renderer} from '../Renderer.js';
+import * as tools from '../marfeelTools.js';
 
 const RENDERER_URL = 'https://acdn.adnxs.com/video/outstream/ANOutstreamVideo.js';
 
-export const specFactory = (bidderCode, getReferrer) => ({
+const getReferrerForServerBidder = (bidderRequest) => bidderRequest.refererInfo.referer;
+const getReferrerForClientBidder = (bidderRequest, bidRequests) => tools.getPageUrl(bidRequests[0], bidderRequest);
+
+export const specFactory = (bidderCode, isServerBidder) => ({
   version: '7.0.0',
   code: bidderCode,
   gvlid: 253,
@@ -49,7 +53,8 @@ export const specFactory = (bidderCode, getReferrer) => ({
     }
 
     if (bidderRequest && bidderRequest.refererInfo && bidderRequest.refererInfo.referer) {
-      requestParameters.referrer = getReferrer(bidderRequest, bidRequests);
+      requestParameters.referrer = isServerBidder ? getReferrerForServerBidder(bidderRequest)
+        : getReferrerForClientBidder(bidderRequest, bidRequests);
     }
 
     requestParameters.schain = bidRequests[0].schain;

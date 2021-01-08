@@ -8,6 +8,7 @@ import find from 'core-js-pure/features/array/find.js';
 import includes from 'core-js-pure/features/array/includes.js';
 import { OUTSTREAM, INSTREAM } from '../video.js';
 import { getStorageManager } from '../storageManager.js';
+import * as tools from '../marfeelTools.js';
 
 const URL = 'https://ib.adnxs.com/ut/v3/prebid';
 const VIDEO_TARGETING = ['id', 'mimes', 'minduration', 'maxduration',
@@ -40,8 +41,12 @@ const VIEWABILITY_URL_START = /\/\/cdn\.adnxs\.com\/v/;
 const VIEWABILITY_FILE_NAME = 'trk.js';
 const GVLID = 32;
 
-export const specFactory = (bidderCode, getRdRef) => {
+const getRdRefForServerBidder = (bidderRequest) => encodeURIComponent(bidderRequest.refererInfo.referer);
+const getRdRefForClientBidder = (bidderRequest, bidRequests) => encodeURIComponent(tools.getPageUrl(bidRequests[0], bidderRequest));
+
+export const specFactory = (bidderCode, isServerBidder) => {
   const storage = getStorageManager(GVLID, bidderCode);
+  const getRdRef = isServerBidder ? getRdRefForServerBidder : getRdRefForClientBidder;
 
   return {
     code: bidderCode,
